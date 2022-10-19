@@ -1,0 +1,14 @@
+<div class="ms-5 me-5 mt-5 col-lg-6 mx-lg-auto">
+<h1>Editing timesheet</h1>
+
+<%= render "form", timesheet: @timesheet %>
+
+<br>
+
+  <div>
+    <%= link_to "Back to timesheets", timesheets_path %>
+    <br><br><br>
+    <%= button_to "Destroy this row", @timesheet, method: :delete %>
+    <br><br><br>
+  </div>
+</div>

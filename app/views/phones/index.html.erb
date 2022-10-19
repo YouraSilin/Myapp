@@ -1,0 +1,46 @@
+<h3>Загрузить телефоны из XLSX</h3>
+<%= form_with url: import_phones_path do |f|%>
+  <div class="mb-3 row">
+    <div class="col-sm-2 col-form-label">
+      <%= f.label :archive, 'выбрать XLSX'%>
+    </div>
+    <div class="col-sm-10">
+      <%= f.file_field :file, class: 'form-control' %>
+    </div>
+  </div>
+  <%= f.submit 'Импорт файла', class: 'btn btn-primary' %>
+<% end %>
+
+<%= link_to 'Экспорт в XLSX', phones_path(format: :xlsx), class: "btn btn-primary mt-5 text-white text-decoration-none", style: "width: 8rem" %>
+
+<%= link_to 'Добавить', new_phone_path, class: "btn btn-primary mt-5 text-white text-decoration-none", style: "width: 8rem" %>
+
+<form class="d-flex mt-5" role="search">
+  <%= form_with(url: phones_path, method: :get, data: { turbo_frame: "phones"}) do |form| %>
+    <%= form.text_field :query, class: "form-control me-2", type: "search", placeholder: "Поиск по телефонам" %>
+    <%= form.submit "Найти", class: "btn btn-outline-success ", style: "width: 8rem", type: "submit" %>
+  <% end %>
+</form>
+
+<div class="table-responsive">
+<table class="table table-striped table-hover border mt-5 mb-10">
+  <thead>
+    <tr>
+      <th scope="col" class="border">Телефон</th>
+      <th scope="col" class="border">ФИО</th>
+      <th scope="col" class="border">Должность</th>
+      <th scope="col" class="border">Отдел</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @phones.each do |phone| %>
+      <tr onclick="window.location.href='<%= edit_phone_path(phone) %>'" > 
+        <td class="border"><div style="background:#<%= if phone.colour.length == 8 then phone.colour[2,7] else phone.colour end %>"><%= phone.number %></div></td>
+        <td class="border"><div style="background:#<%= if phone.colour.length == 8 then phone.colour[2,7] else phone.colour end %>"><%= phone.name %></div></td>
+        <td class="border"><%= phone.position %></td>
+        <td class="border"><%= phone.department %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+</div>

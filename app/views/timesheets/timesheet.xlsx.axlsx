@@ -1,0 +1,17 @@
+wb = xlsx_package.workbook
+
+s = wb.styles
+header = s.add_style font_name: 'Arial', sz: 10, b: true, border: { style: :thin, color: '000000' }, alignment: { horizontal: :center, vertical: :center }
+
+wb.add_worksheet(name: "Phones") do |sheet|
+  
+  sheet.add_row [' ','Код','таб№','офиц.','факт','№','Ф.И.О.','Должность','1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31','Явок','Часов','день','ночь','Итого:','Н','з\я','сп','б','от','а','и','оа'], style: header, height: 30
+  @timesheet.each do |timesheet|
+    label = s.add_style font_name: 'Arial', sz: 10, border: { style: :thin, color: '000000' }, alignment:  { horizontal: :left }
+    days = s.add_style font_name: 'Arial', sz: 10, border: { style: :thin, color: '000000' }, alignment:  { horizontal: :center }
+    cods = s.add_style font_name: 'Arial', sz: 10, b: true, border: { style: :thin, color: '000000' }, alignment:  { horizontal: :left }
+    name = s.add_style font_name: 'Arial', sz: 10, border: { style: :thin, color: '000000' }, alignment: { horizontal: :left }, bg_color: timesheet.colour
+    sheet.add_row [timesheet.unit, timesheet.subdivision_code, timesheet.personnel_number, timesheet.employment_official_date, timesheet.employment_fact_date, timesheet.id, timesheet.full_name, timesheet.position, timesheet.worked_hours_per_shift[0], timesheet.worked_hours_per_shift[1], timesheet.worked_hours_per_shift[2], timesheet.worked_hours_per_shift[3], timesheet.worked_hours_per_shift[4], timesheet.worked_hours_per_shift[5], timesheet.worked_hours_per_shift[6], timesheet.worked_hours_per_shift[7], timesheet.worked_hours_per_shift[8], timesheet.worked_hours_per_shift[9], timesheet.worked_hours_per_shift[10], timesheet.worked_hours_per_shift[11], timesheet.worked_hours_per_shift[12], timesheet.worked_hours_per_shift[13], timesheet.worked_hours_per_shift[14], timesheet.worked_hours_per_shift[15], timesheet.worked_hours_per_shift[16], timesheet.worked_hours_per_shift[17], timesheet.worked_hours_per_shift[18], timesheet.worked_hours_per_shift[19], timesheet.worked_hours_per_shift[20], timesheet.worked_hours_per_shift[21], timesheet.worked_hours_per_shift[22], timesheet.worked_hours_per_shift[23], timesheet.worked_hours_per_shift[24], timesheet.worked_hours_per_shift[25], timesheet.worked_hours_per_shift[26], timesheet.worked_hours_per_shift[27], timesheet.worked_hours_per_shift[28], timesheet.worked_hours_per_shift[29], timesheet.worked_hours_per_shift[30], timesheet.worked_shifts_total, timesheet.worked_hours_total, timesheet.worked_hours_per_day, timesheet.worked_hours_per_night, timesheet.check_formula, timesheet.absences_total, timesheet.absences_by_request, timesheet.absences_by_certificate, timesheet.absences_by_sick_leave, timesheet.vacation_days_total, timesheet.absences_by_permission, timesheet.absences_with_working_out, timesheet.absences_by_permission_vacation], style: [label,cods,cods,label,label,label,name,label,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,cods,cods,label,label,label,label,label,label,label,label,label,label,label]
+    sheet.column_widths 7, 7, 7, 10, 10, 7, 20, 20, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7
+  end
+end

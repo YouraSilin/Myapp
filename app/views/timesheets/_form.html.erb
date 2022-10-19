@@ -1,0 +1,129 @@
+<%= form_with(model: timesheet) do |form| %>
+  <% if timesheet.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(timesheet.errors.count, "error") %> prohibited this timesheet from being saved:</h2>
+
+      <ul>
+        <% timesheet.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="mb-3 row">
+    <%= form.label :unit, style: "display: block" %>
+    <%= form.text_field :unit %>
+  </div>
+
+  <div class="mb-3 row">
+    <%= form.label :subdivision_code, style: "display: block" %>
+    <%= form.text_field :subdivision_code %>
+  </div>
+
+  <div class="mb-3 row">
+    <%= form.label :personnel_number, style: "display: block" %>
+    <%= form.text_field :personnel_number %>
+  </div>
+
+  <div class="mb-3 row">
+    <%= form.label :employment_official_date, style: "display: block" %>
+    <%= form.text_field :employment_official_date %>
+  </div>
+
+  <div class="mb-3 row">
+    <%= form.label :employment_fact_date, style: "display: block" %>
+    <%= form.text_field :employment_fact_date %>
+  </div>
+
+  <div class="mb-3 row">
+    <%= form.label :full_name, style: "display: block" %>
+    <%= form.text_field :full_name %>
+  </div>
+
+  <div class="mb-3 row">
+    <%= form.label :position, style: "display: block" %>
+    <%= form.text_field :position %>
+  </div>
+
+  <div class="mb-3 row">
+    <%= form.label :worked_hours_per_shift, style: "display: block" %>
+    <%= form.text_field :worked_hours_per_shift %>
+  </div>
+
+  <div class="mb-3 row">
+    <%= form.label :note, style: "display: block" %>
+    <%= form.text_field :note %>
+  </div>
+
+  <div class="mb-3 row">
+    <%= form.label :worked_shifts_total, style: "display: block" %>
+    <%= form.text_field :worked_shifts_total %>
+  </div>
+
+  <div class="mb-3 row">
+    <%= form.label :worked_hours_total, style: "display: block" %>
+    <%= form.text_field :worked_hours_total %>
+  </div>
+
+  <div class="mb-3 row">
+    <%= form.label :worked_hours_per_day, style: "display: block" %>
+    <%= form.text_field :worked_hours_per_day %>
+  </div>
+
+  <div class="mb-3 row">
+    <%= form.label :worked_hours_per_night, style: "display: block" %>
+    <%= form.text_field :worked_hours_per_night %>
+  </div>
+
+  <div class="mb-3 row">
+    <%= form.label :check_formula, style: "display: block" %>
+    <%= form.text_field :check_formula %>
+  </div>
+
+  <div class="mb-3 row">
+    <%= form.label :absences_total, style: "display: block" %>
+    <%= form.text_field :absences_total %>
+  </div>
+
+  <div class="mb-3 row">
+    <%= form.label :absences_by_request, style: "display: block" %>
+    <%= form.text_field :absences_by_request %>
+  </div>
+
+  <div class="mb-3 row">
+    <%= form.label :absences_by_certificate, style: "display: block" %>
+    <%= form.text_field :absences_by_certificate %>
+  </div>
+
+  <div class="mb-3 row">
+    <%= form.label :absences_by_sick_leave, style: "display: block" %>
+    <%= form.text_field :absences_by_sick_leave %>
+  </div>
+
+  <div class="mb-3 row">
+    <%= form.label :vacation_days_total, style: "display: block" %>
+    <%= form.text_field :vacation_days_total %>
+  </div>
+
+  <div class="mb-3 row">
+    <%= form.label :absences_by_permission, style: "display: block" %>
+    <%= form.text_field :absences_by_permission %>
+  </div>
+
+  <div class="mb-3 row">
+    <%= form.label :absences_with_working_out, style: "display: block" %>
+    <%= form.text_field :absences_with_working_out %>
+  </div>
+
+  <div class="mb-3 row">
+    <%= form.label :absences_by_permission_vacation, style: "display: block" %>
+    <%= form.text_field :absences_by_permission_vacation %>
+  </div>
+
+  <div>
+    <br><br><br>
+    <%= form.submit %>
+  </div>
+
+<% end %>

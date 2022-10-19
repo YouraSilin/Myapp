@@ -1,0 +1,49 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  unit: MyString
+  subdivision_code: MyString
+  personnel_number: MyString
+  employment_official_date: MyString
+  employment_fact_date: MyString
+  full_name: MyString
+  position: MyString
+  worked_hours_per_shift: MyString
+  note: MyString
+  worked_shifts_total: MyString
+  worked_hours_total: MyString
+  worked_hours_per_day: MyString
+  worked_hours_per_night: MyString
+  check_formula: MyString
+  absences_total: MyString
+  absences_by_request: MyString
+  absences_by_certificate: MyString
+  absences_by_sick_leave: MyString
+  vacation_days_total: MyString
+  absences_by_permission: MyString
+  absences_with_working_out: MyString
+  absences_by_permission_vacation: MyString
+
+two:
+  unit: MyString
+  subdivision_code: MyString
+  personnel_number: MyString
+  employment_official_date: MyString
+  employment_fact_date: MyString
+  full_name: MyString
+  position: MyString
+  worked_hours_per_shift: MyString
+  note: MyString
+  worked_shifts_total: MyString
+  worked_hours_total: MyString
+  worked_hours_per_day: MyString
+  worked_hours_per_night: MyString
+  check_formula: MyString
+  absences_total: MyString
+  absences_by_request: MyString
+  absences_by_certificate: MyString
+  absences_by_sick_leave: MyString
+  vacation_days_total: MyString
+  absences_by_permission: MyString
+  absences_with_working_out: MyString
+  absences_by_permission_vacation: MyString
