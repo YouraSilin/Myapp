@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_12_104809) do
+ActiveRecord::Schema[7.0].define(version: 2022_10_19_095118) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -58,4 +58,15 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_12_104809) do
     t.string "colour", default: "FFFFFF"
   end
 
+  create_table "worked_hours", force: :cascade do |t|
+    t.bigint "timesheet_id", null: false
+    t.integer "day_of_month"
+    t.float "hours"
+    t.string "note"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["timesheet_id"], name: "index_worked_hours_on_timesheet_id"
+  end
+
+  add_foreign_key "worked_hours", "timesheets"
 end
