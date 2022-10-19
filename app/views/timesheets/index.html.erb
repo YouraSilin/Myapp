@@ -70,8 +70,8 @@
         <td class="border"><%= timesheet.id %></td>
         <td class="border"><div style="background:#<%= if timesheet.colour.length == 8 then timesheet.colour[2,7] else timesheet.colour end %>"><%= timesheet.full_name %></div></td>
         <td class="border"><%= timesheet.position %></td>
-        <% timesheet.worked_hours_per_shift.each do |worked_hour| %>
-          <td class="border"><%= worked_hour %></td>
+        <% $days_count.times.map {|i| timesheet.worked_hours.find{ _1.day_of_month == (i + 1)}}.each do |worked_hour| %>
+          <td class="border"><%= worked_hour&.display %></td>
         <% end %>
         <td class="border"><%= timesheet.worked_shifts_total %></td>
         <td class="border"><%= timesheet.worked_hours_total %></td>
