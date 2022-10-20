@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM ruby:3.1
+FROM ruby:3.1.2
 RUN apt-get update -qq && apt-get install -y postgresql-client
 WORKDIR /myapp
 COPY Gemfile /myapp/Gemfile
@@ -45,7 +45,7 @@ RUN cd /usr/local/src \
 
 RUN apt-get install -y \
         ruby-dev \
-        libffi-dev 
+        libffi-dev
 
 RUN gem install ruby-vips
 

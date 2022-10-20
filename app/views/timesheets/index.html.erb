@@ -10,11 +10,8 @@
   </div>
   <%= f.submit 'Импорт файла', class: 'btn btn-primary' %>
 <% end %>
-
 <%= link_to 'Экспорт в XLSX', timesheets_path(format: :xlsx), class: "btn btn-primary mt-5 text-white text-decoration-none", style: "width: 8rem" %>
-
 <%= link_to 'Добавить', new_timesheet_path, class: "btn btn-primary mt-5 text-white text-decoration-none", style: "width: 8rem" %>
-
 <%= link_to "Очистить", timesheet_delete_all_path(@timesheets), class: "btn btn-primary mt-5 text-white text-decoration-none", style: "width: 8rem" , method: :delete %>
 
 <form class="d-flex mt-5" role="search">
@@ -24,12 +21,11 @@
   <% end %>
 </form>
 
-
 <table class="table table-bordered table-striped table-hover mt-5 mb-10" style="font-size: 0.7rem;">
   
   <thead style="position:sticky; top: 0 ; background-color:#FFFFFF; " >
-    <tr>
-      <th rowspan=2 scope="col" ></th>
+    <tr style="position:sticky">
+      <th rowspan=2 scope="col" > </th>
       <th rowspan=2 scope="col" >Код</th>
       <th rowspan=2 scope="col" >таб№</th>
       <th rowspan=2 scope="col" >офиц.</th>
@@ -37,7 +33,7 @@
       <th rowspan=2 scope="col" >№</th>
       <th rowspan=2 scope="col" >фамилия И.О.</th>
       <th rowspan=2 scope="col" >Должность</th>
-      <th colspan=<%= $days_count %> scope="col" > </th>
+      <th colspan=<%= $days_count %> scope="col" ></th>
       <th rowspan=2 scope="col" >Явок</th>
       <th rowspan=2 scope="col" >Часов</th>
       <th rowspan=2 scope="col" >день</th>
@@ -70,8 +66,8 @@
         <td><%= timesheet.id %></td>
         <td><div style="background:#<%= if timesheet.colour.length == 8 then timesheet.colour[2,7] else timesheet.colour end %>"><%= timesheet.full_name %></div></td>
         <td><%= timesheet.position %></td>
-        <% timesheet.worked_hours_per_shift.each do |worked_hour| %>
-          <td><%= worked_hour %></td>
+        <% $days_count.times.map {|i| timesheet.worked_hours.find{ _1.day_of_month == (i + 1)}}.each do |worked_hour| %>
+          <td><%= worked_hour&.display %></td>
         <% end %>
         <td><%= timesheet.worked_shifts_total %></td>
         <td><%= timesheet.worked_hours_total %></td>
