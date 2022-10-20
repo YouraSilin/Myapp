@@ -24,70 +24,69 @@
   <% end %>
 </form>
 
-<div class="">
-<table class="table table-striped table-hover border mt-5 mb-10" style="font-size: 0.7rem;">
+
+<table class="table table-bordered table-striped table-hover mt-5 mb-10" style="font-size: 0.7rem;">
   
-  <thead>
-    <tr style="position:sticky">
-      <th rowspan=2 scope="col" class="border"> </th>
-      <th rowspan=2 scope="col" class="border">Код</th>
-      <th rowspan=2 scope="col" class="border">таб№</th>
-      <th rowspan=2 scope="col" class="border">офиц.</th>
-      <th rowspan=2 scope="col" class="border">факт</th>
-      <th rowspan=2 scope="col" class="border">№</th>
-      <th rowspan=2 scope="col" class="border">фамилия И.О.</th>
-      <th rowspan=2 scope="col" class="border">Должность</th>
-      <th colspan=<%= $days_count %> scope="col" class="border">Дни</th>
-      <th rowspan=2 scope="col" class="border">Явок</th>
-      <th rowspan=2 scope="col" class="border">Часов</th>
-      <th rowspan=2 scope="col" class="border">день</th>
-      <th rowspan=2 scope="col" class="border">ночь</th>
-      <th rowspan=2 scope="col" class="border">Итого:</th>
-      <th rowspan=2 scope="col" class="border">Н</th>
-      <th rowspan=2 scope="col" class="border">з\я</th>
-      <th rowspan=2 scope="col" class="border">сп</th>
-      <th rowspan=2 scope="col" class="border">б</th>
-      <th rowspan=2 scope="col" class="border">от</th>
-      <th rowspan=2 scope="col" class="border">а</th>
-      <th rowspan=2 scope="col" class="border">и</th>
-      <th rowspan=2 scope="col" class="border">оа</th>
+  <thead style="position:sticky; top: 0 ; background-color:#FFFFFF; " >
+    <tr>
+      <th rowspan=2 scope="col" ></th>
+      <th rowspan=2 scope="col" >Код</th>
+      <th rowspan=2 scope="col" >таб№</th>
+      <th rowspan=2 scope="col" >офиц.</th>
+      <th rowspan=2 scope="col" >факт</th>
+      <th rowspan=2 scope="col" >№</th>
+      <th rowspan=2 scope="col" >фамилия И.О.</th>
+      <th rowspan=2 scope="col" >Должность</th>
+      <th colspan=<%= $days_count %> scope="col" > </th>
+      <th rowspan=2 scope="col" >Явок</th>
+      <th rowspan=2 scope="col" >Часов</th>
+      <th rowspan=2 scope="col" >день</th>
+      <th rowspan=2 scope="col" >ночь</th>
+      <th rowspan=2 scope="col" >Итого:</th>
+      <th rowspan=2 scope="col" >Н</th>
+      <th rowspan=2 scope="col" >з\я</th>
+      <th rowspan=2 scope="col" >сп</th>
+      <th rowspan=2 scope="col" >б</th>
+      <th rowspan=2 scope="col" >от</th>
+      <th rowspan=2 scope="col" >а</th>
+      <th rowspan=2 scope="col" >и</th>
+      <th rowspan=2 scope="col" >оа</th>
     </tr>
     <tr>
       <% $days_count.times do |day_num| %>
-        <td class="border"><%= day_num + 1 %></td>
+        <td><%= day_num + 1 %></td>
       <% end %>
     </tr>
   </thead>
   <tbody>
     <% @timesheets.each do |timesheet| %>
       <tr onclick="window.location.href='<%= edit_timesheet_path(timesheet) %>'" > 
-        <td class="border"><%= timesheet.unit %></td>
-        <td class="border"><%= timesheet.subdivision_code %></td>
-        <td class="border"><%= timesheet.personnel_number %></td>
-        <td class="border"><%= (timesheet.employment_official_date[0,10]) %></td> 
+        <td><%= timesheet.unit %></td>
+        <td><%= timesheet.subdivision_code %></td>
+        <td><%= timesheet.personnel_number %></td>
+        <td><%= (timesheet.employment_official_date[0,10]) %></td> 
         <%#= Date.parse(timesheet.employment_official_date).strftime("%d.%m.%y")  %>
-        <td class="border"><%= (timesheet.employment_fact_date[0,10]) %></td>
-        <td class="border"><%= timesheet.id %></td>
-        <td class="border"><div style="background:#<%= if timesheet.colour.length == 8 then timesheet.colour[2,7] else timesheet.colour end %>"><%= timesheet.full_name %></div></td>
-        <td class="border"><%= timesheet.position %></td>
+        <td><%= (timesheet.employment_fact_date[0,10]) %></td>
+        <td><%= timesheet.id %></td>
+        <td><div style="background:#<%= if timesheet.colour.length == 8 then timesheet.colour[2,7] else timesheet.colour end %>"><%= timesheet.full_name %></div></td>
+        <td><%= timesheet.position %></td>
         <% timesheet.worked_hours_per_shift.each do |worked_hour| %>
-          <td class="border"><%= worked_hour %></td>
+          <td><%= worked_hour %></td>
         <% end %>
-        <td class="border"><%= timesheet.worked_shifts_total %></td>
-        <td class="border"><%= timesheet.worked_hours_total %></td>
-        <td class="border"><%= timesheet.worked_hours_per_day %></td>
-        <td class="border"><%= timesheet.worked_hours_per_night %></td>
-        <td class="border"><%= timesheet.check_formula %></td>
-        <td class="border"><%= timesheet.absences_total %></td>
-        <td class="border"><%= timesheet.absences_by_request %></td>
-        <td class="border"><%= timesheet.absences_by_certificate %></td>
-        <td class="border"><%= timesheet.absences_by_sick_leave %></td>
-        <td class="border"><%= timesheet.vacation_days_total %></td>
-        <td class="border"><%= timesheet.absences_by_permission %></td>
-        <td class="border"><%= timesheet.absences_with_working_out %></td>
-        <td class="border"><%= timesheet.absences_by_permission_vacation %></td>
+        <td><%= timesheet.worked_shifts_total %></td>
+        <td><%= timesheet.worked_hours_total %></td>
+        <td><%= timesheet.worked_hours_per_day %></td>
+        <td><%= timesheet.worked_hours_per_night %></td>
+        <td><%= timesheet.check_formula %></td>
+        <td><%= timesheet.absences_total %></td>
+        <td><%= timesheet.absences_by_request %></td>
+        <td><%= timesheet.absences_by_certificate %></td>
+        <td><%= timesheet.absences_by_sick_leave %></td>
+        <td><%= timesheet.vacation_days_total %></td>
+        <td><%= timesheet.absences_by_permission %></td>
+        <td><%= timesheet.absences_with_working_out %></td>
+        <td><%= timesheet.absences_by_permission_vacation %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
-</div>
