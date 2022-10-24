@@ -37,7 +37,7 @@ module Timesheets
                       vacation_days_total: cells[@yavok.to_i + 9],
                       absences_by_permission: cells[@yavok.to_i + 10],
                       absences_with_working_out: cells[@yavok.to_i + 11],
-                      absences_by_permission_vacation: cells[@yavok.to_i + 11])
+                      absences_by_permission_vacation: cells[@yavok.to_i + 12])
 
         add_worked_hours(timesheet, cells[@days_index_from..@days_index_since])
 

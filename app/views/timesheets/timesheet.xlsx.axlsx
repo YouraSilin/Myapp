@@ -3,15 +3,58 @@ wb = xlsx_package.workbook
 s = wb.styles
 header = s.add_style font_name: 'Arial', sz: 10, b: true, border: { style: :thin, color: '000000' }, alignment: { horizontal: :center, vertical: :center }
 
-wb.add_worksheet(name: "Phones") do |sheet|
+wb.add_worksheet(name: "sheet1") do |sheet|
   
-  sheet.add_row [' ','Код','таб№','офиц.','факт','№','Ф.И.О.','Должность','1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31','Явок','Часов','день','ночь','Итого:','Н','з\я','сп','б','от','а','и','оа'], style: header, height: 30
+  r = sheet.add_row [' ','Код','таб№','офиц.','факт','№','Ф.И.О.','Должность'], style: header, height: 30
+    col_widths= [7,7,7,10,10,7,20,20]
+    $days_count.times do |day_num|
+      r.add_cell day_num+1
+      col_widths[8+day_num]= 5
+    end
+
+    r.add_cell 'Явок'
+    r.add_cell 'Часов'
+    r.add_cell 'день'
+    r.add_cell 'ночь'
+    r.add_cell 'Итого:'
+    r.add_cell 'Н'
+    r.add_cell 'з\я'
+    r.add_cell 'сп'
+    r.add_cell 'б'
+    r.add_cell 'от'
+    r.add_cell 'а'
+    r.add_cell 'и'
+    r.add_cell 'оа'
+    sheet.col_style 8..8+$days_count+13, header
+  
   @timesheet.each do |timesheet|
-    label = s.add_style font_name: 'Arial', sz: 10, border: { style: :thin, color: '000000' }, alignment:  { horizontal: :left }
-    days = s.add_style font_name: 'Arial', sz: 10, border: { style: :thin, color: '000000' }, alignment:  { horizontal: :center }
-    cods = s.add_style font_name: 'Arial', sz: 10, b: true, border: { style: :thin, color: '000000' }, alignment:  { horizontal: :left }
+    label = s.add_style font_name: 'Arial', sz: 10, border: { style: :thin, color: '000000' }, alignment:  { horizontal: :left, vertical: :center }
+    days = s.add_style font_name: 'Arial', sz: 10, border: { style: :thin, color: '000000' }, alignment:  { horizontal: :center, vertical: :center }
+    cods = s.add_style font_name: 'Arial', sz: 10, b: true, border: { style: :thin, color: '000000' }, alignment:  { horizontal: :left, vertical: :center }
+    chasov = s.add_style font_name: 'Arial', sz: 10, b: true, border: { style: :thin, color: '000000' }, alignment:  { horizontal: :left, vertical: :center },bg_color: 'FFFFC000'
     name = s.add_style font_name: 'Arial', sz: 10, border: { style: :thin, color: '000000' }, alignment: { horizontal: :left }, bg_color: timesheet.colour
-    sheet.add_row [timesheet.unit, timesheet.subdivision_code, timesheet.personnel_number, timesheet.employment_official_date, timesheet.employment_fact_date, timesheet.id, timesheet.full_name, timesheet.position, timesheet.worked_hours[0].hours, timesheet.worked_hours[1].hours, timesheet.worked_hours[2].hours, timesheet.worked_hours[3].hours, timesheet.worked_hours[4].hours, timesheet.worked_hours[5].hours, timesheet.worked_hours[6].hours, timesheet.worked_hours[7].hours, timesheet.worked_hours[8].hours, timesheet.worked_hours[9].hours, timesheet.worked_hours[10].hours, timesheet.worked_hours[11].hours, timesheet.worked_hours[12].hours, timesheet.worked_hours[13].hours, timesheet.worked_hours[14].hours, timesheet.worked_hours[15].hours, timesheet.worked_hours[16].hours, timesheet.worked_hours[17].hours, timesheet.worked_hours[18].hours, timesheet.worked_hours[19].hours, timesheet.worked_hours[20].hours, timesheet.worked_hours[21].hours, timesheet.worked_hours[22].hours, timesheet.worked_hours[23].hours, timesheet.worked_hours[24].hours, timesheet.worked_hours[25].hours, timesheet.worked_hours[26].hours, timesheet.worked_hours[27].hours, timesheet.worked_hours[28].hours, timesheet.worked_hours[29].hours, timesheet.worked_hours[30].hours, timesheet.worked_shifts_total, timesheet.worked_hours_total, timesheet.worked_hours_per_day, timesheet.worked_hours_per_night, timesheet.check_formula, timesheet.absences_total, timesheet.absences_by_request, timesheet.absences_by_certificate, timesheet.absences_by_sick_leave, timesheet.vacation_days_total, timesheet.absences_by_permission, timesheet.absences_with_working_out, timesheet.absences_by_permission_vacation], style: [label,cods,cods,label,label,label,name,label,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,cods,cods,label,label,label,label,label,label,label,label,label,label,label]
-    sheet.column_widths 7, 7, 7, 10, 10, 7, 20, 20, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7
+    r = sheet.add_row [timesheet.unit, timesheet.subdivision_code, timesheet.personnel_number, timesheet.employment_official_date, timesheet.employment_fact_date, timesheet.id, timesheet.full_name, timesheet.position ], style: [label,cods,cods,label,label,label,name,label,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,cods,cods,label,label,label,label,label,label,label,label,label,label,label]
+    $days_count.times.map {|i| timesheet.worked_hours.find{ _1.day_of_month == (i + 1)}}.each do |worked_hour|
+      r.add_cell worked_hour&.display || ' '
+    end
+    r.add_cell timesheet.worked_shifts_total
+    r.add_cell timesheet.worked_hours_total
+    r.add_cell timesheet.worked_hours_per_day
+    r.add_cell timesheet.worked_hours_per_night
+    r.add_cell timesheet.check_formula
+    r.add_cell timesheet.absences_total
+    r.add_cell timesheet.absences_by_request
+    r.add_cell timesheet.absences_by_certificate
+    r.add_cell timesheet.absences_by_sick_leave
+    r.add_cell timesheet.vacation_days_total
+    r.add_cell timesheet.absences_by_permission
+    r.add_cell timesheet.absences_with_working_out
+    r.add_cell timesheet.absences_by_permission_vacation
+
+    sheet.col_style 8..8+$days_count-1, days, row_offset: 1
+    sheet.col_style 8+$days_count..8+$days_count+1, chasov, row_offset: 1
+    sheet.col_style 8+$days_count+2..8+$days_count+13, label, row_offset: 1
+     
+    sheet.column_widths *col_widths
   end
 end
