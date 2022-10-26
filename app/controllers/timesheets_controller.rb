@@ -2,6 +2,7 @@ class TimesheetsController < ApplicationController
   before_action :set_timesheet, only: %i[ show edit update destroy ]
 
   $days_count = 31
+  
 
   # GET /timesheets or /timesheets.json
   def index
@@ -10,11 +11,11 @@ class TimesheetsController < ApplicationController
         if params[:query].present?
           @timesheets = Timesheet.includes(:worked_hours).where("personnel_number || ' ' || full_name ILIKE ?", "%#{params[:query]}%") if params[:query].present? 
         else
-          @timesheets = Timesheet.includes(:worked_hours).order('full_name')
+          @timesheets = Timesheet.includes(:worked_hours).order('created_at')
         end
       end
       format.xlsx do
-        @timesheet = Timesheet.includes(:worked_hours).order('full_name')
+        @timesheet = Timesheet.includes(:worked_hours).order('created_at')
         render xlsx: 'Табели', template: 'timesheets/timesheet'
       end
     end
@@ -39,7 +40,7 @@ class TimesheetsController < ApplicationController
 
     respond_to do |format|
       if @timesheet.save
-        format.html { redirect_to timesheets_path, notice: "Timesheet was successfully created." }
+        format.html { redirect_to timesheets_path, notice: "строка добавлена" }
         format.json { render :show, status: :created, location: @timesheet }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -52,7 +53,7 @@ class TimesheetsController < ApplicationController
   def update
     respond_to do |format|
       if @timesheet.update(timesheet_params)
-        format.html { redirect_to timesheets_path, notice: "Timesheet was successfully updated." }
+        format.html { redirect_to timesheets_path, notice: "строка изменена" }
         format.json { render :show, status: :ok, location: @timesheet }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -62,23 +63,45 @@ class TimesheetsController < ApplicationController
   end
 
   def import
+    @tc = 0
     Timesheets::Import.call(params[:file])
 
-    redirect_to timesheets_path, notice: "Timesheet imported."
+    redirect_to timesheets_path, notice: "#{$timesheets_imported_count} строк импортировано"
   end
 
   # DELETE /timesheets/1 or /timesheets/1.json
   def destroy
     @timesheet.destroy
     respond_to do |format|
-      format.html { redirect_to timesheets_path, notice: "Timesheet was successfully destroyed." }
+      format.html { redirect_to timesheets_path, notice: "строка удалена" }
       format.json { head :no_content }
     end
   end
 
   def delete_all
+    tc = Timesheet.count
     Timesheet.all.map(&:destroy)
-    redirect_to timesheets_path, notice: "Timesheets deleted."
+    redirect_to timesheets_path, notice: "#{tc} строк удалено"
+  end
+
+  def delete_empty
+    tc = 0
+    Timesheet.count.times do
+      @timesheet = Timesheet.find{ |i| i.personnel_number == '' }
+      if @timesheet then
+        tc = tc + 1
+      end
+      @timesheet&.destroy
+    end
+    redirect_to timesheets_path, notice: "#{tc} пустых строк удалено"
+  end
+
+  def delete_duplicates
+      @timesheets = Timesheet.includes(:worked_hours).all
+      @timesheets = @timesheets - @timesheets.uniq{ |timesheet| [timesheet.worked_hours.count, timesheet.full_name, timesheet.subdivision_code, timesheet.worked_shifts_total, timesheet.worked_hours_total, timesheet.worked_hours_per_day, timesheet.worked_hours_per_night, timesheet.absences_total, timesheet.absences_by_request, timesheet.absences_by_certificate, timesheet.absences_by_sick_leave, timesheet.vacation_days_total, timesheet.absences_by_permission, timesheet.absences_with_working_out, timesheet.absences_by_permission_vacation] }
+      tc = @timesheets.count
+      @timesheets.map(&:destroy)
+    redirect_to timesheets_path, notice: "#{tc} дублей удалены"
   end
 
   private

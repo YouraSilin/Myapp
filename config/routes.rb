@@ -4,6 +4,8 @@ Rails.application.routes.draw do
   end
   resources :timesheets do
       get 'delete_all'
+      get 'delete_empty'
+      get 'delete_duplicates'
   end
   resources :phones do
     collection { post :import }

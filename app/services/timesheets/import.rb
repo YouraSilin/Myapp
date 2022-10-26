@@ -1,9 +1,12 @@
 module Timesheets
   class Import
     def self.call(file)
+      
+      $timesheets_imported_count = 0
+
       sheet = RubyXL::Parser.parse(file)[0]
 
-      sheet[0..0].map do |row| # Первая строка - заголовки
+      sheet[1..1].map do |row| # Вторая строка - заголовки
         heads = row.cells[0..52].map { |c| c&.value.to_s }
         @days = heads.select{ _1 =~ /^\d+$/ } # На выходе получим массив дней.
         @days_index_from = 8 # Индекс начала дней
@@ -13,7 +16,7 @@ module Timesheets
         @yavok = @days_index_from + @days.length()
       end
 
-      sheet[1..-1].each do |row| # Все строки со второй
+      sheet[2..-1].each do |row| # Все строки с третьей
         cells = row.cells[0..52].map { |c| c&.value.to_s }
         colours = row.cells[6..7].map { |c| c&.fill_color }
 
@@ -41,6 +44,7 @@ module Timesheets
 
         add_worked_hours(timesheet, cells[@days_index_from..@days_index_since])
 
+        $timesheets_imported_count = $timesheets_imported_count + 1
         timesheet.save!
       end
     end

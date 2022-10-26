@@ -1,17 +1,16 @@
 wb = xlsx_package.workbook
 
 s = wb.styles
-header = s.add_style font_name: 'Arial', sz: 10, b: true, border: { style: :thin, color: '000000' }, alignment: { horizontal: :center, vertical: :center }
+header = s.add_style font_name: 'Arial', sz: 9, b: true, border: { style: :thin, color: '000000' }, alignment: { horizontal: :center, vertical: :center }
 
 wb.add_worksheet(name: "sheet1") do |sheet|
   
   r = sheet.add_row [' ','Код','таб№','офиц.','факт','№','Ф.И.О.','Должность'], style: header, height: 30
-    col_widths= [7,7,7,10,10,7,20,20]
+    col_widths= [5,4,4,7,7,6,15,15]
     $days_count.times do |day_num|
       r.add_cell day_num+1
-      col_widths[8+day_num]= 5
+      col_widths[8+day_num]= 3.3
     end
-
     r.add_cell 'Явок'
     r.add_cell 'Часов'
     r.add_cell 'день'
@@ -25,6 +24,9 @@ wb.add_worksheet(name: "sheet1") do |sheet|
     r.add_cell 'а'
     r.add_cell 'и'
     r.add_cell 'оа'
+    (8+$days_count..8+$days_count+13).each do |i|
+      col_widths[i]= 5
+    end
     sheet.col_style 8..8+$days_count+13, header
   
   @timesheet.each do |timesheet|
@@ -33,7 +35,7 @@ wb.add_worksheet(name: "sheet1") do |sheet|
     cods = s.add_style font_name: 'Arial', sz: 10, b: true, border: { style: :thin, color: '000000' }, alignment:  { horizontal: :left, vertical: :center }
     chasov = s.add_style font_name: 'Arial', sz: 10, b: true, border: { style: :thin, color: '000000' }, alignment:  { horizontal: :left, vertical: :center },bg_color: 'FFFFC000'
     name = s.add_style font_name: 'Arial', sz: 10, border: { style: :thin, color: '000000' }, alignment: { horizontal: :left }, bg_color: timesheet.colour
-    r = sheet.add_row [timesheet.unit, timesheet.subdivision_code, timesheet.personnel_number, timesheet.employment_official_date, timesheet.employment_fact_date, timesheet.id, timesheet.full_name, timesheet.position ], style: [label,cods,cods,label,label,label,name,label,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,cods,cods,label,label,label,label,label,label,label,label,label,label,label]
+    r = sheet.add_row [timesheet.unit, timesheet.subdivision_code, timesheet.personnel_number, if timesheet.employment_official_date.size > 1 then Date.parse(timesheet.employment_official_date).strftime("%d.%m.%y") end, if timesheet.employment_fact_date.size > 1 then Date.parse(timesheet.employment_fact_date).strftime("%d.%m.%y") end, timesheet.id, timesheet.full_name, timesheet.position ], style: [label,cods,cods,label,label,label,name,label,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,cods,cods,label,label,label,label,label,label,label,label,label,label,label]
     $days_count.times.map {|i| timesheet.worked_hours.find{ _1.day_of_month == (i + 1)}}.each do |worked_hour|
       r.add_cell worked_hour&.display || ' '
     end
@@ -54,7 +56,8 @@ wb.add_worksheet(name: "sheet1") do |sheet|
     sheet.col_style 8..8+$days_count-1, days, row_offset: 1
     sheet.col_style 8+$days_count..8+$days_count+1, chasov, row_offset: 1
     sheet.col_style 8+$days_count+2..8+$days_count+13, label, row_offset: 1
-     
+    
+    
     sheet.column_widths *col_widths
   end
 end

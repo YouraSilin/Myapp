@@ -13,6 +13,8 @@
 <%= link_to 'Экспорт в XLSX', timesheets_path(format: :xlsx), class: "btn btn-primary mt-5 text-white text-decoration-none", style: "width: 8rem" %>
 <%= link_to 'Добавить', new_timesheet_path, class: "btn btn-primary mt-5 text-white text-decoration-none", style: "width: 8rem" %>
 <%= link_to "Очистить", timesheet_delete_all_path(@timesheets), class: "btn btn-primary mt-5 text-white text-decoration-none", style: "width: 8rem" , method: :delete %>
+<%= link_to "Удалить пустышки", timesheet_delete_empty_path(@timesheets), class: "btn btn-primary mt-5 text-white text-decoration-none", style: "width: 8rem" , method: :delete %>
+<%= link_to "Удалить дубликаты", timesheet_delete_duplicates_path(@timesheets), class: "btn btn-primary mt-5 text-white text-decoration-none", style: "width: 8rem" , method: :delete %>
 
 <form class="d-flex mt-5" role="search">
   <%= form_with(url: timesheets_path, method: :get, data: { turbo_frame: "timesheets"}) do |form| %>
@@ -60,9 +62,8 @@
         <td><%= timesheet.unit %></td>
         <td><%= timesheet.subdivision_code %></td>
         <td><%= timesheet.personnel_number %></td>
-        <td><%= (timesheet.employment_official_date[0,10]) %></td> 
-        <%#= Date.parse(timesheet.employment_official_date).strftime("%d.%m.%y")  %>
-        <td><%= (timesheet.employment_fact_date[0,10]) %></td>
+        <td><%= if timesheet.employment_official_date.size > 1 then Date.parse(timesheet.employment_official_date[0,10]).strftime("%d.%m.%y") end %></td> 
+        <td><%= if timesheet.employment_fact_date.size > 1 then Date.parse(timesheet.employment_fact_date[0,10]).strftime("%d.%m.%y") end %></td>
         <td><%= timesheet.id %></td>
         <td><div style="background:#<%= if timesheet.colour.length == 8 then timesheet.colour[2,7] else timesheet.colour end %>"><%= timesheet.full_name %></div></td>
         <td><%= timesheet.position %></td>
