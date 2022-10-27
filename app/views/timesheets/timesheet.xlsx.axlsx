@@ -2,21 +2,22 @@ wb = xlsx_package.workbook
 
 s = wb.styles
 header = s.add_style font_name: 'Arial', sz: 9, b: true, border: { style: :thin, color: '000000' }, alignment: { horizontal: :center, vertical: :center }
+rotate = s.add_style font_name: 'Arial', sz: 9, b: true, border: { style: :thin, color: '000000' }, alignment: {textRotation: 90, horizontal: :center, vertical: :center}
 
 wb.add_worksheet(name: "sheet1") do |sheet|
   
-  r = sheet.add_row [' ','Код','таб№','офиц.','факт','№','Ф.И.О.','Должность'], style: header, height: 30
-    col_widths= [5,4,4,7,7,6,15,15]
+  r = sheet.add_row [' ','код','таб№','офиц.','факт','№','Ф.И.О.','должность'], style: header, height: 40
+    col_widths= [5,4,4,7,7,5,15,15]
     $days_count.times do |day_num|
       r.add_cell day_num+1
       col_widths[8+day_num]= 3.3
     end
-    r.add_cell 'Явок'
-    r.add_cell 'Часов'
+    r.add_cell 'явок'
+    r.add_cell 'часов'
     r.add_cell 'день'
     r.add_cell 'ночь'
-    r.add_cell 'Итого:'
-    r.add_cell 'Н'
+    r.add_cell 'итого'
+    r.add_cell 'н'
     r.add_cell 'з\я'
     r.add_cell 'сп'
     r.add_cell 'б'
@@ -24,14 +25,20 @@ wb.add_worksheet(name: "sheet1") do |sheet|
     r.add_cell 'а'
     r.add_cell 'и'
     r.add_cell 'оа'
-    (8+$days_count..8+$days_count+13).each do |i|
+    (8+$days_count..8+$days_count+5).each do |i|
       col_widths[i]= 5
     end
-    sheet.col_style 8..8+$days_count+13, header
+    (8+$days_count+5..8+$days_count+13).each do |i|
+      col_widths[i]= 3.3
+    end
+    sheet.col_style 8..8+$days_count-1, header
+    sheet.col_style 8+$days_count..8+$days_count+5, rotate
+    sheet.col_style 8+$days_count+5..8+$days_count+13, header
   
   @timesheet.each do |timesheet|
     label = s.add_style font_name: 'Arial', sz: 10, border: { style: :thin, color: '000000' }, alignment:  { horizontal: :left, vertical: :center }
     days = s.add_style font_name: 'Arial', sz: 10, border: { style: :thin, color: '000000' }, alignment:  { horizontal: :center, vertical: :center }
+    itogo = s.add_style font_name: 'Arial', sz: 10, border: { style: :thin, color: '000000' }, alignment:  { horizontal: :center, vertical: :center }, fg_color: "FF0000"
     cods = s.add_style font_name: 'Arial', sz: 10, b: true, border: { style: :thin, color: '000000' }, alignment:  { horizontal: :left, vertical: :center }
     chasov = s.add_style font_name: 'Arial', sz: 10, b: true, border: { style: :thin, color: '000000' }, alignment:  { horizontal: :left, vertical: :center },bg_color: 'FFFFC000'
     name = s.add_style font_name: 'Arial', sz: 10, border: { style: :thin, color: '000000' }, alignment: { horizontal: :left }, bg_color: timesheet.colour
@@ -55,9 +62,10 @@ wb.add_worksheet(name: "sheet1") do |sheet|
 
     sheet.col_style 8..8+$days_count-1, days, row_offset: 1
     sheet.col_style 8+$days_count..8+$days_count+1, chasov, row_offset: 1
-    sheet.col_style 8+$days_count+2..8+$days_count+13, label, row_offset: 1
-    
-    
+    sheet.col_style 8+$days_count+2..8+$days_count+3, label, row_offset: 1
+    sheet.col_style 8+$days_count+4, itogo, row_offset: 1
+    sheet.col_style 8+$days_count+5..8+$days_count+13, label, row_offset: 1
+
     sheet.column_widths *col_widths
   end
 end

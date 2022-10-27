@@ -98,7 +98,7 @@ class TimesheetsController < ApplicationController
 
   def delete_duplicates
       @timesheets = Timesheet.includes(:worked_hours).all
-      @timesheets = @timesheets - @timesheets.uniq{ |timesheet| [timesheet.worked_hours.count, timesheet.full_name, timesheet.subdivision_code, timesheet.worked_shifts_total, timesheet.worked_hours_total, timesheet.worked_hours_per_day, timesheet.worked_hours_per_night, timesheet.absences_total, timesheet.absences_by_request, timesheet.absences_by_certificate, timesheet.absences_by_sick_leave, timesheet.vacation_days_total, timesheet.absences_by_permission, timesheet.absences_with_working_out, timesheet.absences_by_permission_vacation] }
+      @timesheets = @timesheets - @timesheets.uniq{ |timesheet| [timesheet.subdivision_code, timesheet.full_name, timesheet.worked_shifts_total, timesheet.worked_hours.count, timesheet.worked_hours_total, timesheet.worked_hours_per_day, timesheet.worked_hours_per_night, timesheet.absences_total, timesheet.absences_by_request, timesheet.absences_by_certificate, timesheet.absences_by_sick_leave, timesheet.vacation_days_total, timesheet.absences_by_permission, timesheet.absences_with_working_out, timesheet.absences_by_permission_vacation] }
       tc = @timesheets.count
       @timesheets.map(&:destroy)
     redirect_to timesheets_path, notice: "#{tc} дублей удалены"

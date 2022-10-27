@@ -10,10 +10,10 @@ class CreateTimesheets < ActiveRecord::Migration[7.0]
       t.string :position
       t.text :worked_hours_per_shift
       t.string :note
-      t.string :worked_shifts_total
-      t.string :worked_hours_total
-      t.string :worked_hours_per_day
-      t.string :worked_hours_per_night
+      t.float :worked_shifts_total
+      t.float :worked_hours_total
+      t.float :worked_hours_per_day
+      t.float :worked_hours_per_night
       t.string :check_formula
       t.string :absences_total
       t.string :absences_by_request
