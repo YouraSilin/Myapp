@@ -63,7 +63,6 @@ class TimesheetsController < ApplicationController
   end
 
   def import
-    @tc = 0
     Timesheets::Import.call(params[:file])
 
     redirect_to timesheets_path, notice: "#{$timesheets_imported_count} строк импортировано"

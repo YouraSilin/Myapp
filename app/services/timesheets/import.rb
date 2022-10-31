@@ -44,6 +44,8 @@ module Timesheets
         add_otrabotka(timesheet)
         add_otpusk_po_razresheniu(timesheet)
 
+        add_worked_hours_per_shift(timesheet)
+
         $timesheets_imported_count = $timesheets_imported_count + 1
         timesheet.save!
       end
@@ -84,7 +86,9 @@ module Timesheets
           chasov = chasov + worked_hours.hours
         end
         if chasov.to_i == chasov then
-          timesheet.worked_hours_total = chasov.to_i
+          chasov = chasov.to_i
+        else
+          chasov = chasov.round(1)
         end
       end
       timesheet.worked_hours_total = chasov
@@ -97,17 +101,22 @@ module Timesheets
         raznica = timesheet.worked_hours_total - (timesheet.worked_hours_per_day + timesheet.worked_hours_per_night)
       end
       if raznica.to_i == raznica then
-        timesheet.check_formula = raznica.to_i
+        raznica = raznica.to_i
       else
-        timesheet.check_formula = raznica
+        raznica = raznica.round(1)
       end
+      timesheet.check_formula = raznica
         timesheet.save!
     end
 
     def self.add_nevihod(timesheet)
       progul = 0
       timesheet.worked_hours.each do |worked_hours|
-        if worked_hours.note == 'н' then
+        if worked_hours.note == 'н'
+          progul = progul + 1
+        elsif worked_hours.note == 'Н'
+          progul = progul + 1
+        elsif worked_hours.note == 'H'
           progul = progul + 1
         end
       end
@@ -118,7 +127,13 @@ module Timesheets
     def self.add_zayavlenie(timesheet)
       progul = 0
       timesheet.worked_hours.each do |worked_hours|
-        if worked_hours.note == 'з'+'/'+'я' then
+        if worked_hours.note == "з/я"
+          progul = progul + 1
+        elsif worked_hours.note == "з\\я"
+          progul = progul + 1
+        elsif worked_hours.note == "З/Я"
+          progul = progul + 1
+        elsif worked_hours.note == "З\\Я"
           progul = progul + 1
         end
       end
@@ -129,7 +144,9 @@ module Timesheets
     def self.add_spravka(timesheet)
       progul = 0
       timesheet.worked_hours.each do |worked_hours|
-        if worked_hours.note == 'сп' then
+        if worked_hours.note == 'сп'
+          progul = progul + 1
+        elsif worked_hours.note == 'СП'
           progul = progul + 1
         end
       end
@@ -140,7 +157,9 @@ module Timesheets
     def self.add_bolnichniy(timesheet)
       progul = 0
       timesheet.worked_hours.each do |worked_hours|
-        if worked_hours.note == 'б' then
+        if worked_hours.note == 'б'
+          progul = progul + 1
+        elsif worked_hours.note == 'Б'
           progul = progul + 1
         end
       end
@@ -151,7 +170,9 @@ module Timesheets
     def self.add_otpusk(timesheet)
       progul = 0
       timesheet.worked_hours.each do |worked_hours|
-        if worked_hours.note == 'от' then
+        if worked_hours.note == 'от'
+          progul = progul + 1
+        elsif worked_hours.note == 'ОТ'
           progul = progul + 1
         end
       end
@@ -162,7 +183,13 @@ module Timesheets
     def self.add_razreshenie(timesheet)
       progul = 0
       timesheet.worked_hours.each do |worked_hours|
-        if worked_hours.note == 'а' then
+        if worked_hours.note == 'а'
+          progul = progul + 1
+        elsif worked_hours.note == 'a'
+          progul = progul + 1
+        elsif worked_hours.note == 'А'
+          progul = progul + 1
+        elsif worked_hours.note == 'A'
           progul = progul + 1
         end
       end
@@ -173,7 +200,9 @@ module Timesheets
     def self.add_otrabotka(timesheet)
       progul = 0
       timesheet.worked_hours.each do |worked_hours|
-        if worked_hours.note == 'и' then
+        if worked_hours.note == 'и'
+          progul = progul + 1
+        elsif worked_hours.note == 'И'
           progul = progul + 1
         end
       end
@@ -184,12 +213,29 @@ module Timesheets
     def self.add_otpusk_po_razresheniu(timesheet)
       progul = 0
       timesheet.worked_hours.each do |worked_hours|
-        if worked_hours.note == 'оа' then
+        if worked_hours.note == 'оа'
+          progul = progul + 1
+        elsif worked_hours.note == 'oa'
+          progul = progul + 1
+        elsif worked_hours.note == 'ОА'
+          progul = progul + 1
+        elsif worked_hours.note == 'OA'
           progul = progul + 1
         end
       end
       timesheet.absences_by_permission_vacation = progul
       timesheet.save!
+    end
+
+    def self.add_worked_hours_per_shift(timesheet)
+      timesheet.worked_hours_per_shift = 0
+      $days_count.times.map {|i| timesheet.worked_hours.find{ _1.day_of_month == (i + 1)}}.each do |worked_hour|
+
+          timesheet.worked_hours_per_shift = timesheet.worked_hours_per_shift + ',' + worked_hour&.display.to_s
+
+        timesheet.save!
+      end
+      
     end
 
   end

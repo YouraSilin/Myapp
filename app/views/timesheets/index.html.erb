@@ -12,9 +12,9 @@
 <% end %>
 <%= link_to 'Экспорт в XLSX', timesheets_path(format: :xlsx), class: "btn btn-primary mt-5 text-white text-decoration-none", style: "width: 8rem" %>
 <%= link_to 'Добавить', new_timesheet_path, class: "btn btn-primary mt-5 text-white text-decoration-none", style: "width: 8rem" %>
-<%= link_to "Очистить", timesheet_delete_all_path(@timesheets), class: "btn btn-primary mt-5 text-white text-decoration-none", style: "width: 8rem" , method: :delete %>
-<%= link_to "Удалить пустышки", timesheet_delete_empty_path(@timesheets), class: "btn btn-primary mt-5 text-white text-decoration-none", style: "width: 8rem" , method: :delete %>
-<%= link_to "Удалить дубликаты", timesheet_delete_duplicates_path(@timesheets), class: "btn btn-primary mt-5 text-white text-decoration-none", style: "width: 8rem" , method: :delete %>
+<%= link_to "Очистить", timesheet_delete_all_path(@timesheets), class: "btn btn-danger mt-5 text-white text-decoration-none", style: "width: 8rem" , method: :delete %>
+<%= link_to "Удалить пустышки", timesheet_delete_empty_path(@timesheets), class: "btn btn-success mt-5 text-white text-decoration-none", style: "width: 8rem" , method: :delete %>
+<%= link_to "Удалить дубликаты", timesheet_delete_duplicates_path(@timesheets), class: "btn btn-success mt-5 text-white text-decoration-none", style: "width: 8rem" , method: :delete %>
 
 <form class="d-flex mt-5" role="search">
   <%= form_with(url: timesheets_path, method: :get, data: { turbo_frame: "timesheets"}) do |form| %>
@@ -23,16 +23,20 @@
   <% end %>
 </form>
 
-<table class="table table-bordered table-striped table-hover mt-5 mb-10 custom-class " style="font-size: 0.7rem;" >
+<div class="mt-3">
+  <p>всего <%= Timesheet.all.count %> строк</p>
+</div>
+
+<table class="table table-bordered table-striped table-hover mt-5 mb-10 custom-class" style="font-size: 0.7rem;" >
   
   <thead style="position:sticky; height: 40px; top: 0 ; background-color:#FFFFFF; " >
-    <tr style="position:sticky; ">
-      <th style="width: 30px;" rowspan=2 scope="col" > </th>
-      <th style="width: 30px;" rowspan=2 scope="col" >код</th>
+    <tr class="text-nowrap" style="position:sticky; ">
+      <th style="width: 40px;" rowspan=2 scope="col" > </th>
+      <th style="width: 40px;" rowspan=2 scope="col" >код</th>
       <th style="width: 40px;" rowspan=2 scope="col" >таб№</th>
-      <th style="width: 57px;" rowspan=2 scope="col" >офиц.</th>
-      <th style="width: 57px;" rowspan=2 scope="col" >факт</th>
-      <th style="width: 40px;" rowspan=2 scope="col" >№</th>
+      <th style="width: 60px;" rowspan=2 scope="col" >офиц.</th>
+      <th style="width: 60px;" rowspan=2 scope="col" >факт</th>
+      <th style="width: 60px;" rowspan=2 scope="col" >№</th>
       <th style="width: 130px;" rowspan=2 scope="col" >Ф.И.О.</th>
       <th style="width: 160px;" rowspan=2 scope="col" >должность</th>
       <th style="width: 860px;" colspan=<%= $days_count %> scope="col" ></th>
@@ -42,7 +46,7 @@
       <th style="width: 40px;" rowspan=2 scope="col" >ночь</th>
       <th style="width: 40px;" rowspan=2 scope="col" >итого</th>
       <th style="width: 25px;" rowspan=2 scope="col" >н</th>
-      <th style="width: 25px;" rowspan=2 scope="col" >з\я</th>
+      <th style="width: 25px;" rowspan=2 scope="col" >з/я</th>
       <th style="width: 25px;" rowspan=2 scope="col" >сп</th>
       <th style="width: 25px;" rowspan=2 scope="col" >б</th>
       <th style="width: 25px;" rowspan=2 scope="col" >от</th>
@@ -64,16 +68,16 @@
         <td class="fw-bold"><%= timesheet.personnel_number %></td>
         <td><%= if timesheet.employment_official_date.size > 1 then Date.parse(timesheet.employment_official_date[0,10]).strftime("%d.%m.%y") end %></td> 
         <td><%= if timesheet.employment_fact_date.size > 1 then Date.parse(timesheet.employment_fact_date[0,10]).strftime("%d.%m.%y") end %></td>
-        <td><%= timesheet.id %></td>
+        <td class="text-nowrap overflow-hidden" ><%= timesheet.id %></td>
         <td><div style="background:#<%= if timesheet.colour.length == 8 then timesheet.colour[2,7] else timesheet.colour end %>"><%= timesheet.full_name %></div></td>
-        <td><%= timesheet.position %></td>
+        <td class="overflow-hidden"><%= timesheet.position %></td>
         <% $days_count.times.map {|i| timesheet.worked_hours.find{ _1.day_of_month == (i + 1)}}.each do |worked_hour| %>
-          <td ><%= worked_hour&.display %></td>
+          <td class="text-nowrap overflow-hidden"><%= worked_hour&.display %></td>
         <% end %>
         <td class="fw-bold"><%= if timesheet.worked_shifts_total.to_i == timesheet.worked_shifts_total then timesheet.worked_shifts_total.to_i else timesheet.worked_shifts_total end %></td>
         <td class="fw-bold"><%= if timesheet.worked_hours_total.to_i == timesheet.worked_hours_total then timesheet.worked_hours_total.to_i else timesheet.worked_hours_total end %></td>
-        <td><%= if timesheet.worked_hours_per_day.to_i == timesheet.worked_hours_per_day then timesheet.worked_hours_per_day.to_i else timesheet.worked_hours_per_day end %></td>
-        <td><%= if timesheet.worked_hours_per_night.to_i == timesheet.worked_hours_per_night then timesheet.worked_hours_per_night.to_i else timesheet.worked_hours_per_night end %></td>
+        <td class="text-nowrap overflow-hidden"><%= if timesheet.worked_hours_per_day.to_i == timesheet.worked_hours_per_day then timesheet.worked_hours_per_day.to_i else timesheet.worked_hours_per_day end %></td>
+        <td class="text-nowrap overflow-hidden"><%= if timesheet.worked_hours_per_night.to_i == timesheet.worked_hours_per_night then timesheet.worked_hours_per_night.to_i else timesheet.worked_hours_per_night end %></td>
         <td class="text-danger"><%= timesheet.check_formula %></td>
         <td><%= timesheet.absences_total %></td>
         <td><%= timesheet.absences_by_request %></td>

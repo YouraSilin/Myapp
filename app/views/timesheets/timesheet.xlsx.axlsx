@@ -7,10 +7,10 @@ rotate = s.add_style font_name: 'Arial', sz: 9, b: true, border: { style: :thin,
 wb.add_worksheet(name: "sheet1") do |sheet|
   
   r = sheet.add_row [' ','код','таб№','офиц.','факт','№','Ф.И.О.','должность'], style: header, height: 40
-    col_widths= [5,4,4,7,7,5,15,15]
+    col_widths= [5,4,4,7,7,5,17,15]
     $days_count.times do |day_num|
       r.add_cell day_num+1
-      col_widths[8+day_num]= 3.3
+      col_widths[8+day_num]= 3.7
     end
     r.add_cell 'явок'
     r.add_cell 'часов'
@@ -18,7 +18,7 @@ wb.add_worksheet(name: "sheet1") do |sheet|
     r.add_cell 'ночь'
     r.add_cell 'итого'
     r.add_cell 'н'
-    r.add_cell 'з\я'
+    r.add_cell 'з/я'
     r.add_cell 'сп'
     r.add_cell 'б'
     r.add_cell 'от'
@@ -37,7 +37,7 @@ wb.add_worksheet(name: "sheet1") do |sheet|
   
   @timesheet.each do |timesheet|
     label = s.add_style font_name: 'Arial', sz: 10, border: { style: :thin, color: '000000' }, alignment:  { horizontal: :left, vertical: :center }
-    days = s.add_style font_name: 'Arial', sz: 10, border: { style: :thin, color: '000000' }, alignment:  { horizontal: :center, vertical: :center }
+    days = s.add_style font_name: 'Arial', sz: 8, border: { style: :thin, color: '000000' }, alignment:  { horizontal: :center, vertical: :center }
     itogo = s.add_style font_name: 'Arial', sz: 10, border: { style: :thin, color: '000000' }, alignment:  { horizontal: :center, vertical: :center }, fg_color: "FF0000"
     cods = s.add_style font_name: 'Arial', sz: 10, b: true, border: { style: :thin, color: '000000' }, alignment:  { horizontal: :left, vertical: :center }
     chasov = s.add_style font_name: 'Arial', sz: 10, b: true, border: { style: :thin, color: '000000' }, alignment:  { horizontal: :left, vertical: :center },bg_color: 'FFFFC000'

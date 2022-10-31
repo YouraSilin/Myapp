@@ -1,7 +1,7 @@
 <%= form_with(model: timesheet) do |form| %>
   <% if timesheet.errors.any? %>
     <div style="color: red">
-      <h2><%= pluralize(timesheet.errors.count, "error") %> prohibited this timesheet from being saved:</h2>
+      <h2><%= pluralize(timesheet.errors.count, "error") %> ошибка сохранения</h2>
 
       <ul>
         <% timesheet.errors.each do |error| %>
@@ -11,119 +11,120 @@
     </div>
   <% end %>
 
-  <div class="mb-3 row">
-    <%= form.label :unit, style: "display: block" %>
-    <%= form.text_field :unit %>
-  </div>
+  <div>
 
-  <div class="mb-3 row">
-    <%= form.label :subdivision_code, style: "display: block" %>
-    <%= form.text_field :subdivision_code %>
-  </div>
+    <%= form.label :ЦЕХ %>
+    <%= form.text_field :unit, placeholder: " Телефон", class: "form-control"  %>
 
-  <div class="mb-3 row">
-    <%= form.label :personnel_number, style: "display: block" %>
-    <%= form.text_field :personnel_number %>
-  </div>
+    <br>
 
-  <div class="mb-3 row">
-    <%= form.label :employment_official_date, style: "display: block" %>
-    <%= form.text_field :employment_official_date %>
-  </div>
+    <%= form.label :"код подразделения" %>
+    <%= form.text_field :subdivision_code, class: "form-control"  %>
 
-  <div class="mb-3 row">
-    <%= form.label :employment_fact_date, style: "display: block" %>
-    <%= form.text_field :employment_fact_date %>
-  </div>
+    <br>
 
-  <div class="mb-3 row">
-    <%= form.label :full_name, style: "display: block" %>
-    <%= form.text_field :full_name %>
-  </div>
+    <%= form.label :"табельный номер" %>
+    <%= form.text_field :personnel_number, class: "form-control"  %>
 
-  <div class="mb-3 row">
-    <%= form.label :position, style: "display: block" %>
-    <%= form.text_field :position %>
-  </div>
+    <br>
 
-  <div class="mb-3 row">
-    <%= form.label :worked_hours_per_shift, style: "display: block" %>
-    <%= form.text_field :worked_hours_per_shift %>
-  </div>
+    <%= form.label :"официальная дата трудоустройства", style: "display: block" %>
+    <%= form.text_field :employment_official_date, class: "form-control"  %>
 
-  <div class="mb-3 row">
-    <%= form.label :note, style: "display: block" %>
-    <%= form.text_field :note %>
-  </div>
+    <br>
 
-  <div class="mb-3 row">
-    <%= form.label :worked_shifts_total, style: "display: block" %>
-    <%= form.text_field :worked_shifts_total %>
-  </div>
+    <%= form.label :"фактическая дата трудоустройства", style: "display: block" %>
+    <%= form.text_field :employment_fact_date, class: "form-control"  %>
 
-  <div class="mb-3 row">
-    <%= form.label :worked_hours_total, style: "display: block" %>
-    <%= form.text_field :worked_hours_total %>
-  </div>
+    <br>
 
-  <div class="mb-3 row">
-    <%= form.label :worked_hours_per_day, style: "display: block" %>
-    <%= form.text_field :worked_hours_per_day %>
-  </div>
+    <%= form.label :"фамилия, имя, отчество", style: "display: block" %>
+    <%= form.text_field :full_name, class: "form-control"  %>
 
-  <div class="mb-3 row">
-    <%= form.label :worked_hours_per_night, style: "display: block" %>
-    <%= form.text_field :worked_hours_per_night %>
-  </div>
+    <br>
 
-  <div class="mb-3 row">
-    <%= form.label :check_formula, style: "display: block" %>
-    <%= form.text_field :check_formula %>
-  </div>
+    <%= form.label :"должность", style: "display: block" %>
+    <%= form.text_field :position, class: "form-control"  %>
 
-  <div class="mb-3 row">
-    <%= form.label :absences_total, style: "display: block" %>
-    <%= form.text_field :absences_total %>
-  </div>
+    <br>
 
-  <div class="mb-3 row">
-    <%= form.label :absences_by_request, style: "display: block" %>
-    <%= form.text_field :absences_by_request %>
-  </div>
+    <%= form.label :"отработанные часы", style: "display: block" %>
+    <%= form.text_field :worked_hours_per_shift, class: "form-control"  %>
 
-  <div class="mb-3 row">
-    <%= form.label :absences_by_certificate, style: "display: block" %>
-    <%= form.text_field :absences_by_certificate %>
-  </div>
+    <br>
 
-  <div class="mb-3 row">
-    <%= form.label :absences_by_sick_leave, style: "display: block" %>
-    <%= form.text_field :absences_by_sick_leave %>
-  </div>
+    <%= form.label :"буквы", style: "display: block" %>
+    <%= form.text_field :note, class: "form-control"  %>
 
-  <div class="mb-3 row">
-    <%= form.label :vacation_days_total, style: "display: block" %>
-    <%= form.text_field :vacation_days_total %>
-  </div>
+    <br>
 
-  <div class="mb-3 row">
-    <%= form.label :absences_by_permission, style: "display: block" %>
-    <%= form.text_field :absences_by_permission %>
-  </div>
+    <%= form.label :"явок", style: "display: block" %>
+    <%= form.text_field :worked_shifts_total, class: "form-control"  %>
 
-  <div class="mb-3 row">
-    <%= form.label :absences_with_working_out, style: "display: block" %>
-    <%= form.text_field :absences_with_working_out %>
-  </div>
+    <br>
 
-  <div class="mb-3 row">
-    <%= form.label :absences_by_permission_vacation, style: "display: block" %>
-    <%= form.text_field :absences_by_permission_vacation %>
+    <%= form.label :"часов", style: "display: block" %>
+    <%= form.text_field :worked_hours_total, class: "form-control"  %>
+
+    <br>
+
+    <%= form.label :"день", style: "display: block" %>
+    <%= form.text_field :worked_hours_per_day, class: "form-control"  %>
+
+    <br>
+
+    <%= form.label :"ночь", style: "display: block" %>
+    <%= form.text_field :worked_hours_per_night, class: "form-control"  %>
+
+    <br>
+
+    <%= form.label :"итого", style: "display: block" %>
+    <%= form.text_field :check_formula, class: "form-control"  %>
+
+    <br>
+
+    <%= form.label :"н", style: "display: block" %>
+    <%= form.text_field :absences_total, class: "form-control"  %>
+
+    <br>
+
+    <%= form.label :"зя", style: "display: block" %>
+    <%= form.text_field :absences_by_request, class: "form-control"  %>
+
+    <br>
+
+    <%= form.label :"сп", style: "display: block" %>
+    <%= form.text_field :absences_by_certificate, class: "form-control"  %>
+
+    <br>
+
+    <%= form.label :"б", style: "display: block" %>
+    <%= form.text_field :absences_by_sick_leave, class: "form-control"  %>
+
+    <br>
+
+    <%= form.label :"от", style: "display: block" %>
+    <%= form.text_field :vacation_days_total, class: "form-control"  %>
+
+    <br>
+
+    <%= form.label :"а", style: "display: block" %>
+    <%= form.text_field :absences_by_permission, class: "form-control"  %>
+
+    <br>
+
+    <%= form.label :"и", style: "display: block" %>
+    <%= form.text_field :absences_with_working_out, class: "form-control"  %>
+
+    <br>
+
+    <%= form.label :"оа", style: "display: block" %>
+    <%= form.text_field :absences_by_permission_vacation, class: "form-control"  %>
   </div>
 
   <div>
     <br><br><br>
-    <%= form.submit %>
+    <%= form.submit "сохранить", class: "btn btn-primary mt-5 text-white text-decoration-none", style: "width: 8rem" %>
   </div>
 
 <% end %>
