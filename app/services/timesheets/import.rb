@@ -7,7 +7,7 @@ module Timesheets
       sheet = RubyXL::Parser.parse(file)[0]
 
       sheet[1..1].map do |row| # Вторая строка - заголовки
-        heads = row.cells[0..52].map { |c| c&.value.to_s }
+        heads = row.cells[0..38].map { |c| c&.value.to_s }
         @days = heads.select{ _1 =~ /^\d+$/ } # На выходе получим массив дней.
         @days_index_from = 8 # Индекс начала дней
         @days_index_since = @days_index_from + @days.length() - 1 # Индекс конца дней
@@ -17,8 +17,9 @@ module Timesheets
       end
 
       sheet[2..-1].each do |row| # Все строки с третьей
-        cells = row.cells[0..52].map { |c| c&.value.to_s }
+        cells = row.cells[0..38].map { |c| c&.value.to_s }
         colours = row.cells[6..7].map { |c| c&.fill_color }
+        fill_colors = row.cells[0..38].map { |c| c&.fill_color }
 
         timesheet = Timesheet.new(colour: colours[0],
                       unit: cells[0],
@@ -27,14 +28,14 @@ module Timesheets
                       employment_official_date: cells[3].slice(0,10),
                       employment_fact_date: cells[4].slice(0,10),
                       full_name: cells[6],
-                      position: cells[7],
-                      worked_hours_per_day: cells[@yavok.to_i + 2],
-                      worked_hours_per_night: cells[@yavok.to_i + 3])
+                      position: cells[7])
+                      #worked_hours_per_day: cells[@yavok.to_i + 2],
+                      #worked_hours_per_night: cells[@yavok.to_i + 3])
 
-        add_worked_hours(timesheet, cells[@days_index_from..@days_index_since])
+        add_worked_hours(timesheet, cells[@days_index_from..@days_index_since], fill_colors[@days_index_from..@days_index_since])
+
         add_yavok(timesheet)
         add_chasov(timesheet)
-        add_itogo(timesheet)
         add_nevihod(timesheet)
         add_zayavlenie(timesheet)
         add_spravka(timesheet)
@@ -46,12 +47,17 @@ module Timesheets
 
         add_worked_hours_per_shift(timesheet)
 
+        add_worked_hours_per_day(timesheet)
+        add_worked_hours_per_night(timesheet)
+        add_itogo(timesheet)
+        
         $timesheets_imported_count = $timesheets_imported_count + 1
         timesheet.save!
       end
     end
 
-    def self.add_worked_hours(timesheet, cells)
+    def self.add_worked_hours(timesheet, cells, fill_colors)
+
       cells.each.with_index do |cell, index|
         next if cell.blank?
         cell.gsub!(',', '.')
@@ -60,10 +66,11 @@ module Timesheets
 
         if cell.to_f > 0
           attributes[:hours] = cell.to_f
+          attributes[:fill] = fill_colors[index]
         else
           attributes[:note] = cell
         end
-
+        
         timesheet.worked_hours.build(attributes)
       end
     end
@@ -93,20 +100,6 @@ module Timesheets
       end
       timesheet.worked_hours_total = chasov
       timesheet.save!
-    end
-
-    def self.add_itogo(timesheet)
-      raznica = 0
-      if timesheet.worked_hours_total.to_f > 0 and timesheet.worked_hours_per_day.to_f > 0 and timesheet.worked_hours_per_night.to_f > 0 then
-        raznica = timesheet.worked_hours_total - (timesheet.worked_hours_per_day + timesheet.worked_hours_per_night)
-      end
-      if raznica.to_i == raznica then
-        raznica = raznica.to_i
-      else
-        raznica = raznica.round(1)
-      end
-      timesheet.check_formula = raznica
-        timesheet.save!
     end
 
     def self.add_nevihod(timesheet)
@@ -230,12 +223,59 @@ module Timesheets
     def self.add_worked_hours_per_shift(timesheet)
       timesheet.worked_hours_per_shift = 0
       $days_count.times.map {|i| timesheet.worked_hours.find{ _1.day_of_month == (i + 1)}}.each do |worked_hour|
-
           timesheet.worked_hours_per_shift = timesheet.worked_hours_per_shift + ',' + worked_hour&.display.to_s
-
         timesheet.save!
       end
-      
+    end
+
+    def self.add_worked_hours_per_day(timesheet)
+      chasov = 0
+      timesheet.worked_hours.each do |worked_hours|
+        if worked_hours.fill == 'ffffff'
+          if worked_hours.hours.to_f > 0 then
+            chasov = chasov + worked_hours.hours
+          end
+        end
+        if chasov.to_i == chasov then
+          chasov = chasov.to_i
+        else
+          chasov = chasov.round(1)
+        end
+      end
+      timesheet.worked_hours_per_day = chasov
+      timesheet.save!
+    end
+
+    def self.add_worked_hours_per_night(timesheet)
+      chasov = 0
+      timesheet.worked_hours.each do |worked_hours|
+        if worked_hours.fill != 'ffffff'
+          if worked_hours.hours.to_f > 0 then
+            chasov = chasov + worked_hours.hours
+          end
+        end
+        if chasov.to_i == chasov then
+          chasov = chasov.to_i
+        else
+          chasov = chasov.round(1)
+        end
+      end
+      timesheet.worked_hours_per_night = chasov
+      timesheet.save!
+    end
+
+    def self.add_itogo(timesheet)
+      raznica = 0
+      if timesheet.worked_hours_total.to_f > 0 and timesheet.worked_hours_per_day.to_f > 0 and timesheet.worked_hours_per_night.to_f > 0 then
+        raznica = timesheet.worked_hours_total - (timesheet.worked_hours_per_day + timesheet.worked_hours_per_night)
+      end
+      if raznica.to_i == raznica then
+        raznica = raznica.to_i
+      else
+        raznica = raznica.round(1)
+      end
+      timesheet.check_formula = raznica
+        timesheet.save!
     end
 
   end

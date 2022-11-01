@@ -53,9 +53,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_20_094847) do
     t.string "absences_by_permission"
     t.string "absences_with_working_out"
     t.string "absences_by_permission_vacation"
+    t.string "colour", default: "FFFFFF"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "colour", default: "FFFFFF"
   end
 
   create_table "worked_hours", force: :cascade do |t|
@@ -63,6 +63,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_20_094847) do
     t.integer "day_of_month"
     t.float "hours"
     t.string "note"
+    t.string "fill"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["timesheet_id"], name: "index_worked_hours_on_timesheet_id"

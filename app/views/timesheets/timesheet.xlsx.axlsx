@@ -7,7 +7,7 @@ rotate = s.add_style font_name: 'Arial', sz: 9, b: true, border: { style: :thin,
 wb.add_worksheet(name: "sheet1") do |sheet|
   
   r = sheet.add_row [' ','код','таб№','офиц.','факт','№','Ф.И.О.','должность'], style: header, height: 40
-    col_widths= [5,4,4,7,7,5,17,15]
+    col_widths= [5,4,6,7,7,5,17,13]
     $days_count.times do |day_num|
       r.add_cell day_num+1
       col_widths[8+day_num]= 3.7

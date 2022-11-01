@@ -15,7 +15,7 @@ class TimesheetsController < ApplicationController
         end
       end
       format.xlsx do
-        @timesheet = Timesheet.includes(:worked_hours).order('created_at')
+        @timesheet = Timesheet.includes(:worked_hours).order('full_name')
         render xlsx: 'Табели', template: 'timesheets/timesheet'
       end
     end

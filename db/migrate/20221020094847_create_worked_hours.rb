@@ -5,7 +5,7 @@ class CreateWorkedHours < ActiveRecord::Migration[7.0]
       t.integer :day_of_month
       t.float :hours
       t.string :note
-
+      t.string :fill
       t.timestamps
     end
   end

@@ -23,7 +23,7 @@ class CreateTimesheets < ActiveRecord::Migration[7.0]
       t.string :absences_by_permission
       t.string :absences_with_working_out
       t.string :absences_by_permission_vacation
-
+      t.string :colour, :default => "FFFFFF"
       t.timestamps
     end
   end
