@@ -37,13 +37,16 @@ wb.add_worksheet(name: "sheet1") do |sheet|
   
   @timesheet.each do |timesheet|
     label = s.add_style font_name: 'Arial', sz: 10, border: { style: :thin, color: '000000' }, alignment:  { horizontal: :left, vertical: :center }
+    
     days = s.add_style font_name: 'Arial', sz: 8, border: { style: :thin, color: '000000' }, alignment:  { horizontal: :center, vertical: :center }
     itogo = s.add_style font_name: 'Arial', sz: 10, border: { style: :thin, color: '000000' }, alignment:  { horizontal: :center, vertical: :center }, fg_color: "FF0000"
     cods = s.add_style font_name: 'Arial', sz: 10, b: true, border: { style: :thin, color: '000000' }, alignment:  { horizontal: :left, vertical: :center }
     chasov = s.add_style font_name: 'Arial', sz: 10, b: true, border: { style: :thin, color: '000000' }, alignment:  { horizontal: :left, vertical: :center },bg_color: 'FFFFC000'
     name = s.add_style font_name: 'Arial', sz: 10, border: { style: :thin, color: '000000' }, alignment: { horizontal: :left }, bg_color: timesheet.colour
-    r = sheet.add_row [timesheet.unit, timesheet.subdivision_code, timesheet.personnel_number, if timesheet.employment_official_date.size > 1 then Date.parse(timesheet.employment_official_date).strftime("%d.%m.%y") end, if timesheet.employment_fact_date.size > 1 then Date.parse(timesheet.employment_fact_date).strftime("%d.%m.%y") end, timesheet.id, timesheet.full_name, timesheet.position ], style: [label,cods,cods,label,label,label,name,label,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,days,cods,cods,label,label,label,label,label,label,label,label,label,label,label]
+    r = sheet.add_row [timesheet.unit, timesheet.subdivision_code, timesheet.personnel_number, if timesheet.employment_official_date.size > 1 then Date.parse(timesheet.employment_official_date).strftime("%d.%m.%y") end, if timesheet.employment_fact_date.size > 1 then Date.parse(timesheet.employment_fact_date).strftime("%d.%m.%y") end, timesheet.id, timesheet.full_name, timesheet.position ], style: [label,cods,cods,label,label,label,name,label]
     $days_count.times.map {|i| timesheet.worked_hours.find{ _1.day_of_month == (i + 1)}}.each do |worked_hour|
+      
+      
       r.add_cell worked_hour&.display || ' '
     end
     r.add_cell timesheet.worked_shifts_total
@@ -60,7 +63,14 @@ wb.add_worksheet(name: "sheet1") do |sheet|
     r.add_cell timesheet.absences_with_working_out
     r.add_cell timesheet.absences_by_permission_vacation
 
-    sheet.col_style 8..8+$days_count-1, days, row_offset: 1
+    
+    $days_count.times.map {|i| timesheet.worked_hours.find{ _1.day_of_month == (i + 1)}}.each_with_index do |worked_hour, index|
+      
+      style1 = s.add_style font_name: 'Arial', sz: 8, border: { style: :thin, color: '000000' }, alignment:  { horizontal: :center, vertical: :center }, bg_color: worked_hour&.fill
+      sheet.rows.last.cells[8+index].style = style1
+    end
+
+    
     sheet.col_style 8+$days_count..8+$days_count+1, chasov, row_offset: 1
     sheet.col_style 8+$days_count+2..8+$days_count+3, label, row_offset: 1
     sheet.col_style 8+$days_count+4, itogo, row_offset: 1

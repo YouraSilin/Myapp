@@ -69,10 +69,10 @@
         <td><%= if timesheet.employment_official_date.size > 1 then Date.parse(timesheet.employment_official_date[0,10]).strftime("%d.%m.%y") end %></td> 
         <td><%= if timesheet.employment_fact_date.size > 1 then Date.parse(timesheet.employment_fact_date[0,10]).strftime("%d.%m.%y") end %></td>
         <td class="text-nowrap overflow-hidden" ><%= timesheet.id %></td>
-        <td><div style="background:#<%= if timesheet.colour&.length == 8 then timesheet.colour[2,7] else timesheet.colour end %>"><%= timesheet.full_name %></div></td>
+        <td><div style="background:#<%= if timesheet.colour&.length == 8 then timesheet.colour[2,7] else timesheet&.colour end %>"><%= timesheet.full_name %></div></td>
         <td class="overflow-hidden"><%= timesheet.position %></td>
         <% $days_count.times.map {|i| timesheet.worked_hours.find{ _1.day_of_month == (i + 1)}}.each do |worked_hour| %>
-          <td class="text-nowrap overflow-hidden"><div style="background:#<%= if worked_hour&.fill&.length == 8 then worked_hour&.fill[2,7] else worked_hour&.fill end %>"><%= worked_hour&.display %></div></td>
+          <td class="text-nowrap overflow-hidden"><div style="background:#<%= if worked_hour&.fill&.length == 8 then worked_hour.fill[2,7] else worked_hour&.fill end %>"><%= worked_hour&.display %></div></td>
         <% end %>
         <td class="fw-bold"><%= if timesheet.worked_shifts_total.to_i == timesheet.worked_shifts_total then timesheet.worked_shifts_total.to_i else timesheet.worked_shifts_total end %></td>
         <td class="fw-bold"><%= if timesheet.worked_hours_total.to_i == timesheet.worked_hours_total then timesheet.worked_hours_total.to_i else timesheet.worked_hours_total end %></td>
