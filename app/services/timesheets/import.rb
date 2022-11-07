@@ -83,7 +83,6 @@ module Timesheets
         end
       end
       timesheet.worked_shifts_total = shifts
-      timesheet.save!
     end
 
     def self.add_chasov(timesheet)
@@ -99,7 +98,6 @@ module Timesheets
         end
       end
       timesheet.worked_hours_total = chasov
-      timesheet.save!
     end
 
     def self.add_nevihod(timesheet)
@@ -114,7 +112,6 @@ module Timesheets
         end
       end
       timesheet.absences_total = progul
-      timesheet.save!
     end
 
     def self.add_zayavlenie(timesheet)
@@ -131,7 +128,6 @@ module Timesheets
         end
       end
       timesheet.absences_by_request = progul
-      timesheet.save!
     end
 
     def self.add_spravka(timesheet)
@@ -144,7 +140,6 @@ module Timesheets
         end
       end
       timesheet.absences_by_certificate = progul
-      timesheet.save!
     end
 
     def self.add_bolnichniy(timesheet)
@@ -157,7 +152,6 @@ module Timesheets
         end
       end
       timesheet.absences_by_sick_leave = progul
-      timesheet.save!
     end
 
     def self.add_otpusk(timesheet)
@@ -170,7 +164,6 @@ module Timesheets
         end
       end
       timesheet.vacation_days_total = progul
-      timesheet.save!
     end
 
     def self.add_razreshenie(timesheet)
@@ -187,7 +180,6 @@ module Timesheets
         end
       end
       timesheet.absences_by_permission = progul
-      timesheet.save!
     end
 
     def self.add_otrabotka(timesheet)
@@ -200,7 +192,6 @@ module Timesheets
         end
       end
       timesheet.absences_with_working_out = progul
-      timesheet.save!
     end
 
     def self.add_otpusk_po_razresheniu(timesheet)
@@ -217,14 +208,12 @@ module Timesheets
         end
       end
       timesheet.absences_by_permission_vacation = progul
-      timesheet.save!
     end
 
     def self.add_worked_hours_per_shift(timesheet)
       timesheet.worked_hours_per_shift = 0
       $days_count.times.map {|i| timesheet.worked_hours.find{ _1.day_of_month == (i + 1)}}.each do |worked_hour|
           timesheet.worked_hours_per_shift = timesheet.worked_hours_per_shift + ',' + worked_hour&.display.to_s
-        timesheet.save!
       end
     end
 
@@ -243,7 +232,6 @@ module Timesheets
         end
       end
       timesheet.worked_hours_per_day = chasov
-      timesheet.save!
     end
 
     def self.add_worked_hours_per_night(timesheet)
@@ -261,7 +249,6 @@ module Timesheets
         end
       end
       timesheet.worked_hours_per_night = chasov
-      timesheet.save!
     end
 
     def self.add_itogo(timesheet)
@@ -275,7 +262,6 @@ module Timesheets
         raznica = raznica.round(1)
       end
       timesheet.check_formula = raznica
-        timesheet.save!
     end
 
   end

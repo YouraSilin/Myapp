@@ -14,7 +14,7 @@
   <div>
 
     <%= form.label :ЦЕХ %>
-    <%= form.text_field :unit, placeholder: " Телефон", class: "form-control"  %>
+    <%= form.text_field :unit, class: "form-control"  %>
 
     <br>
 
@@ -50,6 +50,37 @@
 
     <%= form.label :"отработанные часы", style: "display: block" %>
     <%= form.text_field :worked_hours_per_shift, class: "form-control"  %>
+
+    <br>
+
+    <table class="table table-bordered table-striped table-hover mt-5 mb-10 custom-class" style="font-size: 0.7rem;" >
+        <thead style="height: 40px; top: 0 ; background-color:#FFFFFF; " >
+          <tr>
+            <% $days_count.times do |day_num| %>
+              <td><b><%= day_num + 1 %></b></td>
+            <% end %>
+          </tr>
+        </thead>
+        <tbody>
+            <tr> 
+              <% $days_count.times.map {|i| timesheet.worked_hours.find{ _1.day_of_month == (i + 1)}}.each do |worked_hour| %>
+                <td class="text-nowrap overflow-hidden"><div style="background:#<%= if worked_hour&.fill&.length == 8 then worked_hour.fill[2,7] else worked_hour&.fill end %>"><%= worked_hour&.display %></div></td>
+              <% end %>
+            </tr>
+        </tbody>
+      </table>
+
+      
+      <% $days_count.times.map {|i| timesheet.worked_hours.find{ _1.day_of_month == (i + 1)}}.each_with_index do |worked_hour, index| %>
+          <%= form.label "#{index + 1}" %>
+          <%= form.text_field :hours, placeholder: worked_hour&.display %>
+          <%= form.text_field :note, placeholder: worked_hour&.note %>
+          <%= form.text_field :fill, placeholder: worked_hour&.fill %>
+          <%= form.check_box :_destroy %>
+          <%= form.label :_destroy, "удалить" %>
+          <br>
+      <% end %>
+
 
     <br>
 
