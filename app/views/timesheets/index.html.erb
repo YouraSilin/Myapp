@@ -1,22 +1,21 @@
 <h3>Загрузить табель из XLSX</h3>
 <%= form_with url: import_timesheets_path do |f|%>
-  <div class="mb-3 row">
-    <div class="col-sm-2 col-form-label">
-      <%= f.label :archive, 'выбрать XLSX'%>
-    </div>
-    <div class="col-sm-10">
+  <div class="mt-3 mb-3 row">
+    <div class="">
       <%= f.file_field :file, class: 'form-control' %>
     </div>
   </div>
   <%= f.submit 'Импорт файла', class: 'btn btn-primary' %>
 <% end %>
-<%= link_to 'Экспорт в XLSX', timesheets_path(format: :xlsx), class: "btn btn-primary mt-5 text-white text-decoration-none", style: "width: 8rem" %>
-<%= link_to 'Добавить', new_timesheet_path, class: "btn btn-primary mt-5 text-white text-decoration-none", style: "width: 8rem" %>
-<%= link_to "Очистить", timesheet_delete_all_path(@timesheets), class: "btn btn-danger mt-5 text-white text-decoration-none", style: "width: 8rem" , method: :delete %>
-<%= link_to "Удалить пустышки", timesheet_delete_empty_path(@timesheets), class: "btn btn-success mt-5 text-white text-decoration-none", style: "width: 8rem" , method: :delete %>
-<%= link_to "Удалить дубликаты", timesheet_delete_duplicates_path(@timesheets), class: "btn btn-success mt-5 text-white text-decoration-none", style: "width: 8rem" , method: :delete %>
+<div class="mt-3">
+  <%= link_to 'Экспорт в XLSX', timesheets_path(format: :xlsx), class: "btn btn-primary text-white text-decoration-none", style: "width: 8rem" %>
+  <%= link_to 'Добавить', new_timesheet_path, class: "btn btn-primary text-white text-decoration-none", style: "width: 8rem" %>
+  <%= link_to "Очистить", timesheet_delete_all_path(@timesheets), class: "btn btn-danger text-white text-decoration-none", style: "width: 8rem" , method: :delete %>
+  <%= link_to "Удалить пустышки", timesheet_delete_empty_path(@timesheets), class: "btn btn-success text-white text-decoration-none", style: "width: 8rem" , method: :delete %>
+  <%= link_to "Удалить дубликаты", timesheet_delete_duplicates_path(@timesheets), class: "btn btn-success text-white text-decoration-none", style: "width: 8rem" , method: :delete %>
+</div>
 
-<form class="d-flex mt-5" role="search">
+<form class="d-flex mt-3" role="search">
   <%= form_with(url: timesheets_path, method: :get, data: { turbo_frame: "timesheets"}) do |form| %>
     <%= form.text_field :query, class: "form-control me-2", type: "search", placeholder: "Поиск по табелям" %>
     <%= form.submit "Найти", class: "btn btn-outline-success ", style: "width: 8rem", type: "submit" %>
@@ -24,10 +23,10 @@
 </form>
 
 <div class="mt-3">
-  <p>всего <%= Timesheet.all.count %> строк</p>
+  <p>всего: <%= Timesheet.all.count %> строк</p>
 </div>
 
-<table class="table table-bordered table-striped table-hover mt-5 mb-10 custom-class" style="font-size: 0.7rem;" >
+<table class="table table-bordered table-striped table-hover mt-3 mb-10 custom-class" style="font-size: 0.7rem;" >
   
   <thead style="position:sticky; height: 40px; top: 0 ; background-color:#FFFFFF; " >
     <tr class="text-nowrap" style="position:sticky; ">

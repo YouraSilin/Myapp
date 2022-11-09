@@ -2,20 +2,21 @@ class TimesheetsController < ApplicationController
   before_action :set_timesheet, only: %i[ show edit update destroy ]
 
   $days_count = 31
-  
 
+  require 'pry-remote'
+  
   # GET /timesheets or /timesheets.json
   def index
     respond_to do |format|
       format.html do
         if params[:query].present?
-          @timesheets = Timesheet.includes(:worked_hours).where("personnel_number || ' ' || full_name ILIKE ?", "%#{params[:query]}%") if params[:query].present? 
+          @timesheets = Timesheet.where("personnel_number || ' ' || full_name ILIKE ?", "%#{params[:query]}%") if params[:query].present? 
         else
-          @timesheets = Timesheet.includes(:worked_hours).order('created_at')
+          @timesheets = Timesheet.order('created_at')
         end
       end
       format.xlsx do
-        @timesheet = Timesheet.includes(:worked_hours).order('full_name')
+        @timesheet = Timesheet.order('full_name')
         render xlsx: 'Табели', template: 'timesheets/timesheet'
       end
     end
@@ -28,6 +29,7 @@ class TimesheetsController < ApplicationController
   # GET /timesheets/new
   def new
     @timesheet = Timesheet.new
+    @timesheet.worked_hours.build
   end
 
   # GET /timesheets/1/edit
@@ -37,7 +39,6 @@ class TimesheetsController < ApplicationController
   # POST /timesheets or /timesheets.json
   def create
     @timesheet = Timesheet.new(timesheet_params)
-
     respond_to do |format|
       if @timesheet.save
         format.html { redirect_to timesheets_path, notice: "строка добавлена" }
@@ -51,13 +52,16 @@ class TimesheetsController < ApplicationController
 
   # PATCH/PUT /timesheets/1 or /timesheets/1.json
   def update
-    respond_to do |format|
-      if @timesheet.update(timesheet_params)
+    if @timesheet.update(timesheet_params)
+      Timesheets::Recalculate.new(@timesheet).call
+      respond_to do |format|
         format.html { redirect_to timesheets_path, notice: "строка изменена" }
         format.json { render :show, status: :ok, location: @timesheet }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @timesheet.errors, status: :unprocessable_entity }
+      end
+    else
+      respond_to do |format|
+        format.html { render :edit, status: :unprocessible_entity }
+        format.json { render json: @timesheet.errors, status: :unprocessible_entity }
       end
     end
   end
@@ -112,6 +116,6 @@ class TimesheetsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def timesheet_params
-    params.require(:timesheet).permit(:unit, :subdivision_code, :personnel_number, :employment_official_date, :employment_fact_date, :full_name, :position, :worked_hours_per_shift, :note, :worked_shifts_total, :worked_hours_total, :worked_hours_per_day, :worked_hours_per_night, :check_formula, :absences_total, :absences_by_request, :absences_by_certificate, :absences_by_sick_leave, :vacation_days_total, :absences_by_permission, :absences_with_working_out, :absences_by_permission_vacation, :colour)
+    params.require(:timesheet).permit(:unit, :subdivision_code, :personnel_number, :employment_official_date, :employment_fact_date, :full_name, :position, :worked_shifts_total, :worked_hours_total, :worked_hours_per_day, :worked_hours_per_night, :check_formula, :absences_total, :absences_by_request, :absences_by_certificate, :absences_by_sick_leave, :vacation_days_total, :absences_by_permission, :absences_with_working_out, :absences_by_permission_vacation, :colour,  worked_hours_attributes: [:id, :hours, :note, :fill ])
   end
 end

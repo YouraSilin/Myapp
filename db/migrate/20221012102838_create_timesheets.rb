@@ -8,8 +8,6 @@ class CreateTimesheets < ActiveRecord::Migration[7.0]
       t.string :employment_fact_date
       t.string :full_name
       t.string :position
-      t.text :worked_hours_per_shift
-      t.string :note
       t.float :worked_shifts_total
       t.float :worked_hours_total
       t.float :worked_hours_per_day

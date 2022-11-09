@@ -6,7 +6,6 @@ class CreatePhones < ActiveRecord::Migration[7.0]
       t.string :colour
       t.string :position
       t.string :department
-
       t.timestamps
     end
   end

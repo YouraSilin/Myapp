@@ -44,9 +44,6 @@ module Timesheets
         add_razreshenie(timesheet)
         add_otrabotka(timesheet)
         add_otpusk_po_razresheniu(timesheet)
-
-        add_worked_hours_per_shift(timesheet)
-
         add_worked_hours_per_day(timesheet)
         add_worked_hours_per_night(timesheet)
         add_itogo(timesheet)
@@ -59,18 +56,20 @@ module Timesheets
     def self.add_worked_hours(timesheet, cells, fill_colors)
 
       cells.each.with_index do |cell, index|
-        next if cell.blank?
-        cell.gsub!(',', '.')
-
         attributes = {day_of_month: index + 1}
-
-        if cell.to_f > 0
-          attributes[:hours] = cell.to_f
-          attributes[:fill] = fill_colors[index]
+        if cell.blank? then
+          attributes[:note] = ''
         else
-          attributes[:note] = cell
+          cell.gsub!(',', '.')
+          
+          if cell.to_f > 0
+            attributes[:hours] = cell.to_f
+            attributes[:fill] = fill_colors[index]
+          else
+            attributes[:note] = cell
+          end
         end
-        
+
         timesheet.worked_hours.build(attributes)
       end
     end
@@ -208,13 +207,6 @@ module Timesheets
         end
       end
       timesheet.absences_by_permission_vacation = progul
-    end
-
-    def self.add_worked_hours_per_shift(timesheet)
-      timesheet.worked_hours_per_shift = 0
-      $days_count.times.map {|i| timesheet.worked_hours.find{ _1.day_of_month == (i + 1)}}.each do |worked_hour|
-          timesheet.worked_hours_per_shift = timesheet.worked_hours_per_shift + ',' + worked_hour&.display.to_s
-      end
     end
 
     def self.add_worked_hours_per_day(timesheet)

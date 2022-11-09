@@ -38,8 +38,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_20_094847) do
     t.string "employment_fact_date"
     t.string "full_name"
     t.string "position"
-    t.text "worked_hours_per_shift"
-    t.string "note"
     t.float "worked_shifts_total"
     t.float "worked_hours_total"
     t.float "worked_hours_per_day"

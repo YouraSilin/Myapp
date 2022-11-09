@@ -1,12 +1,11 @@
-<div class="ms-5 me-5 mt-5 col-lg-6 mx-lg-auto">
-<h1>New timesheet</h1>
+<div class="ms-5 me-5 mt-3 col-lg-6 mx-lg-auto">
+<h1>Добавить строку</h1>
 
 <%= render "form", timesheet: @timesheet %>
 
 <br>
 
-  <div>
-    <%= link_to "Back to timesheets", timesheets_path %>
-    <br><br><br>
+  <div class="mb-3">
+    <%= link_to "назад", timesheets_path, class: "btn btn-primary text-white text-decoration-none", style: "width: 8rem" %>
   </div>
 </div>
