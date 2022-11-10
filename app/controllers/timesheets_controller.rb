@@ -39,6 +39,9 @@ class TimesheetsController < ApplicationController
   # POST /timesheets or /timesheets.json
   def create
     @timesheet = Timesheet.new(timesheet_params)
+
+    add_worked_hours(@timesheet)
+
     respond_to do |format|
       if @timesheet.save
         format.html { redirect_to timesheets_path, notice: "строка добавлена" }
@@ -70,6 +73,14 @@ class TimesheetsController < ApplicationController
     Timesheets::Import.call(params[:file])
 
     redirect_to timesheets_path, notice: "#{$timesheets_imported_count} строк импортировано"
+  end
+
+  def add_worked_hours(timesheet)
+    $days_count.times.each do |index|
+      attributes = {day_of_month: index + 1}
+      attributes[:note] = ''
+      timesheet.worked_hours.build(attributes)
+    end
   end
 
   # DELETE /timesheets/1 or /timesheets/1.json

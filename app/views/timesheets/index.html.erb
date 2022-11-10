@@ -1,18 +1,22 @@
 <h3>Загрузить табель из XLSX</h3>
 <%= form_with url: import_timesheets_path do |f|%>
-  <div class="mt-3 mb-3 row">
-    <div class="">
+  <div class="mt-3 row">
+    
+    <div class="col col-md-auto d-flex">
+      <%= f.submit 'Импорт файла', class: 'btn btn-primary' %>
+    </div>
+    <div class="col">
       <%= f.file_field :file, class: 'form-control' %>
     </div>
   </div>
-  <%= f.submit 'Импорт файла', class: 'btn btn-primary' %>
+  
 <% end %>
-<div class="mt-3">
-  <%= link_to 'Экспорт в XLSX', timesheets_path(format: :xlsx), class: "btn btn-primary text-white text-decoration-none", style: "width: 8rem" %>
-  <%= link_to 'Добавить', new_timesheet_path, class: "btn btn-primary text-white text-decoration-none", style: "width: 8rem" %>
-  <%= link_to "Очистить", timesheet_delete_all_path(@timesheets), class: "btn btn-danger text-white text-decoration-none", style: "width: 8rem" , method: :delete %>
-  <%= link_to "Удалить пустышки", timesheet_delete_empty_path(@timesheets), class: "btn btn-success text-white text-decoration-none", style: "width: 8rem" , method: :delete %>
-  <%= link_to "Удалить дубликаты", timesheet_delete_duplicates_path(@timesheets), class: "btn btn-success text-white text-decoration-none", style: "width: 8rem" , method: :delete %>
+<div>
+  <%= link_to 'Экспорт в XLSX', timesheets_path(format: :xlsx), class: "btn btn-primary text-white text-decoration-none mt-3", style: "width: 8rem" %>
+  <%= link_to 'Добавить строку', new_timesheet_path, class: "btn btn-primary text-white text-decoration-none mt-3", style: "width: 8rem" %>
+  <%= link_to "Удалить пустышки", timesheet_delete_empty_path(@timesheets), class: "btn btn-success text-white text-decoration-none mt-3", style: "width: 8rem" , method: :delete %>
+  <%= link_to "Удалить дубликаты", timesheet_delete_duplicates_path(@timesheets), class: "btn btn-success text-white text-decoration-none mt-3", style: "width: 8rem" , method: :delete %>
+  <%= link_to "Удалить все строки", timesheet_delete_all_path(@timesheets), class: "btn btn-danger text-white text-decoration-none mt-3", style: "width: 8rem" , method: :delete %>
 </div>
 
 <form class="d-flex mt-3" role="search">
@@ -26,10 +30,10 @@
   <p>всего: <%= Timesheet.all.count %> строк</p>
 </div>
 
-<table class="table table-bordered table-striped table-hover mt-3 mb-10 custom-class" style="font-size: 0.7rem;" >
+<table class="table table-sm table-bordered table-striped table-hover mt-3 mb-10 custom-class" style="font-size: 0.7rem;" >
   
   <thead style="position:sticky; height: 40px; top: 0 ; background-color:#FFFFFF; " >
-    <tr class="text-nowrap" style="position:sticky; ">
+    <tr class="text-center text-nowrap" style="position:sticky; ">
       <th style="width: 40px;" rowspan=2 scope="col" > </th>
       <th style="width: 40px;" rowspan=2 scope="col" >код</th>
       <th style="width: 40px;" rowspan=2 scope="col" >таб№</th>
@@ -53,7 +57,7 @@
       <th style="width: 25px;" rowspan=2 scope="col" >и</th>
       <th style="width: 25px;" rowspan=2 scope="col" >оа</th>
     </tr>
-    <tr>
+    <tr class="text-center">
       <% $days_count.times do |day_num| %>
         <td><b><%= day_num + 1 %></b></td>
       <% end %>
@@ -71,7 +75,7 @@
         <td><div style="background:#<%= if timesheet.colour&.length == 8 then timesheet.colour[2,7] else timesheet&.colour end %>"><%= timesheet.full_name %></div></td>
         <td class="overflow-hidden"><%= timesheet.position %></td>
         <% $days_count.times.map {|i| timesheet.worked_hours.find{ _1.day_of_month == (i + 1)}}.each do |worked_hour| %>
-          <td class="text-nowrap overflow-hidden"><div style="background:#<%= if worked_hour&.fill&.length == 8 then worked_hour.fill[2,7] else worked_hour&.fill end %>"><%= worked_hour&.display %></div></td>
+          <td class="text-nowrap overflow-hidden text-center"><div style="background:#<%= if worked_hour&.fill&.length == 8 then worked_hour.fill[2,7] else worked_hour&.fill end %>"><%= worked_hour&.display %></div></td>
         <% end %>
         <td class="fw-bold"><%= if timesheet.worked_shifts_total.to_i == timesheet.worked_shifts_total then timesheet.worked_shifts_total.to_i else timesheet.worked_shifts_total end %></td>
         <td class="fw-bold"><%= if timesheet.worked_hours_total.to_i == timesheet.worked_hours_total then timesheet.worked_hours_total.to_i else timesheet.worked_hours_total end %></td>
