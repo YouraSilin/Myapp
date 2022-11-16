@@ -5,7 +5,7 @@ module Timesheets
       @timesheet = timesheet
     end
 
-    def call
+    def call(save: true)
       add_yavok(timesheet)
       add_chasov(timesheet)
       add_nevihod(timesheet)
@@ -19,8 +19,9 @@ module Timesheets
       add_worked_hours_per_day(timesheet)
       add_worked_hours_per_night(timesheet)
       add_itogo(timesheet)
-      timesheet.save!
+      timesheet.save! if save
     end
+    
     def add_yavok(timesheet)
       shifts = 0
       timesheet.worked_hours.each do |worked_hours|

@@ -10,7 +10,7 @@ class TimesheetsController < ApplicationController
     respond_to do |format|
       format.html do
         if params[:query].present?
-          @timesheets = Timesheet.where("personnel_number || ' ' || full_name ILIKE ?", "%#{params[:query]}%") if params[:query].present? 
+          @timesheets = Timesheet.where("personnel_number || full_name ILIKE ?", "%#{params[:query]}%") if params[:query].present? 
         else
           @timesheets = Timesheet.order('created_at')
         end
@@ -39,9 +39,7 @@ class TimesheetsController < ApplicationController
   # POST /timesheets or /timesheets.json
   def create
     @timesheet = Timesheet.new(timesheet_params)
-
     add_worked_hours(@timesheet)
-
     respond_to do |format|
       if @timesheet.save
         format.html { redirect_to timesheets_path, notice: "строка добавлена" }
@@ -71,12 +69,11 @@ class TimesheetsController < ApplicationController
 
   def import
     Timesheets::Import.call(params[:file])
-
     redirect_to timesheets_path, notice: "#{$timesheets_imported_count} строк импортировано"
   end
 
   def add_worked_hours(timesheet)
-    $days_count.times.each do |index|
+    $days_count.times do |index|
       attributes = {day_of_month: index + 1}
       attributes[:note] = ''
       timesheet.worked_hours.build(attributes)
@@ -99,23 +96,29 @@ class TimesheetsController < ApplicationController
   end
 
   def delete_empty
-    tc = 0
-    Timesheet.count.times do
-      @timesheet = Timesheet.find{ |i| i.personnel_number == '' }
-      if @timesheet then
-        tc = tc + 1
-      end
-      @timesheet&.destroy
-    end
+    tc = Timesheet.where(personnel_number: '').count
+    Timesheet.where(personnel_number: '').map(&:destroy)
     redirect_to timesheets_path, notice: "#{tc} пустых строк удалено"
   end
 
   def delete_duplicates
-      @timesheets = Timesheet.includes(:worked_hours).all
-      @timesheets = @timesheets - @timesheets.uniq{ |timesheet| [timesheet.subdivision_code, timesheet.full_name, timesheet.worked_shifts_total, timesheet.worked_hours.count, timesheet.worked_hours_total, timesheet.worked_hours_per_day, timesheet.worked_hours_per_night, timesheet.absences_total, timesheet.absences_by_request, timesheet.absences_by_certificate, timesheet.absences_by_sick_leave, timesheet.vacation_days_total, timesheet.absences_by_permission, timesheet.absences_with_working_out, timesheet.absences_by_permission_vacation] }
-      tc = @timesheets.count
-      @timesheets.map(&:destroy)
+    @timesheets = Timesheet.all
+    @timesheets = @timesheets - @timesheets.uniq{ |timesheet| [timesheet.subdivision_code, timesheet.personnel_number, timesheet.full_name, timesheet.worked_shifts_total, timesheet.worked_hours.count, timesheet.worked_hours_total, timesheet.worked_hours_per_day, timesheet.worked_hours_per_night, timesheet.absences_total, timesheet.absences_by_request, timesheet.absences_by_certificate, timesheet.absences_by_sick_leave, timesheet.vacation_days_total, timesheet.absences_by_permission, timesheet.absences_with_working_out, timesheet.absences_by_permission_vacation] }
+    tc = @timesheets.count
+    @timesheets.map(&:destroy)
     redirect_to timesheets_path, notice: "#{tc} дублей удалены"
+  end
+
+  def delete_turquoise
+    tc = Timesheet.where(colour: 'FF00FFFF').count
+    Timesheet.where(colour: 'FF00FFFF').map(&:destroy)
+    redirect_to timesheets_path, notice: "#{tc} строк удалено"
+  end
+
+  def delete_not_turquoise
+    tc = Timesheet.where.not(colour: 'FF00FFFF').count
+    Timesheet.where.not(colour: 'FF00FFFF').map(&:destroy)
+    redirect_to timesheets_path, notice: "#{tc} строк удалено"
   end
 
   private
@@ -127,6 +130,6 @@ class TimesheetsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def timesheet_params
-    params.require(:timesheet).permit(:unit, :subdivision_code, :personnel_number, :employment_official_date, :employment_fact_date, :full_name, :position, :worked_shifts_total, :worked_hours_total, :worked_hours_per_day, :worked_hours_per_night, :check_formula, :absences_total, :absences_by_request, :absences_by_certificate, :absences_by_sick_leave, :vacation_days_total, :absences_by_permission, :absences_with_working_out, :absences_by_permission_vacation, :colour,  worked_hours_attributes: [:id, :hours, :note, :fill ])
+    params.require(:timesheet).permit(:unit, :subdivision_code, :personnel_number, :employment_official_date, :employment_fact_date, :full_name, :position, :worked_shifts_total, :worked_hours_total, :worked_hours_per_day, :worked_hours_per_night, :check_formula, :absences_total, :absences_by_request, :absences_by_certificate, :absences_by_sick_leave, :vacation_days_total, :absences_by_permission, :absences_with_working_out, :absences_by_permission_vacation, :colour,  worked_hours_attributes: [:id, :hours, :note, :fill])
   end
 end

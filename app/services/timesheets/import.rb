@@ -36,8 +36,6 @@ module Timesheets
 
         Timesheets::Recalculate.new(timesheet).call
 
-        
-        
         $timesheets_imported_count = $timesheets_imported_count + 1
         timesheet.save!
       end
@@ -63,7 +61,6 @@ module Timesheets
         timesheet.worked_hours.build(attributes)
       end
     end
-
     
   end
 end

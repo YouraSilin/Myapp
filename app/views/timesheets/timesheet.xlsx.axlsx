@@ -35,10 +35,10 @@ wb.add_worksheet(name: "sheet1") do |sheet|
     sheet.col_style 8+$days_count..8+$days_count+5, rotate
     sheet.col_style 8+$days_count+5..8+$days_count+13, header
   
-  @timesheet.each do |timesheet|
+  Timesheet.order(:full_name).group_by(&:full_name).each do |full_name, timesheets|
+  timesheet = timesheets.sum
     label = s.add_style font_name: 'Arial', sz: 10, border: { style: :thin, color: '000000' }, alignment:  { horizontal: :left, vertical: :center }
     
-    days = s.add_style font_name: 'Arial', sz: 8, border: { style: :thin, color: '000000' }, alignment:  { horizontal: :center, vertical: :center }
     itogo = s.add_style font_name: 'Arial', sz: 10, border: { style: :thin, color: '000000' }, alignment:  { horizontal: :center, vertical: :center }, fg_color: "FF0000"
     cods = s.add_style font_name: 'Arial', sz: 10, b: true, border: { style: :thin, color: '000000' }, alignment:  { horizontal: :left, vertical: :center }
     chasov = s.add_style font_name: 'Arial', sz: 10, b: true, border: { style: :thin, color: '000000' }, alignment:  { horizontal: :left, vertical: :center },bg_color: 'FFFFC000'
@@ -63,8 +63,8 @@ wb.add_worksheet(name: "sheet1") do |sheet|
     
     $days_count.times.map {|i| timesheet.worked_hours.find{ _1.day_of_month == (i + 1)}}.each_with_index do |worked_hour, index|
       
-      style1 = s.add_style font_name: 'Arial', sz: 8, border: { style: :thin, color: '000000' }, alignment:  { horizontal: :center, vertical: :center }, bg_color: worked_hour&.fill
-      sheet.rows.last.cells[8+index].style = style1
+      days = s.add_style font_name: 'Arial', sz: 8, border: { style: :thin, color: '000000' }, alignment:  { horizontal: :center, vertical: :center }, bg_color: worked_hour&.fill
+      sheet.rows.last.cells[8+index].style = days
     end
     
     sheet.col_style 8+$days_count..8+$days_count+1, chasov, row_offset: 1

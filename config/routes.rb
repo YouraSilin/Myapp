@@ -6,6 +6,8 @@ Rails.application.routes.draw do
     get 'delete_all'
     get 'delete_empty'
     get 'delete_duplicates'
+    get 'delete_turquoise'
+    get 'delete_not_turquoise'
   end
   resources :phones do
     collection { post :import }
