@@ -61,6 +61,5 @@ module Timesheets
         timesheet.worked_hours.build(attributes)
       end
     end
-    
   end
 end

@@ -21,7 +21,7 @@ module Timesheets
       add_itogo(timesheet)
       timesheet.save! if save
     end
-    
+
     def add_yavok(timesheet)
       shifts = 0
       timesheet.worked_hours.each do |worked_hours|
