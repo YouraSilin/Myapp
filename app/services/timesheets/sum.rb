@@ -10,7 +10,7 @@ module Timesheets
         WorkedHour.new(
           day_of_month: day_of_month,
           hours: (hours.sum if hours.any?),
-          fill: ('FF0000' if hours.sum > 11 && hours.any? ),
+          fill: ('FF0000' if hours.sum > 11 ),
           note: note
         )
       end
