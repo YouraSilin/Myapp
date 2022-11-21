@@ -15,10 +15,6 @@ class TimesheetsController < ApplicationController
           @timesheets = Timesheet.order('created_at')
         end
       end
-      format.xlsx do
-        @timesheet = Timesheet.order('full_name')
-        render xlsx: 'Табели', template: 'timesheets/timesheet'
-      end
     end
   end
 
@@ -28,8 +24,16 @@ class TimesheetsController < ApplicationController
 
   # GET /timesheets/new
   def new
-    @timesheet = Timesheet.new
-    @timesheet.worked_hours.build
+    respond_to do |format|
+      format.html do
+        @timesheet = Timesheet.new
+        @timesheet.worked_hours.build
+      end
+      format.xlsx do
+        @timesheet = Timesheet.order('full_name')
+        render xlsx: 'Табели', template: 'timesheets/timesheet'
+      end
+    end
   end
 
   # GET /timesheets/1/edit
@@ -61,7 +65,7 @@ class TimesheetsController < ApplicationController
       end
     else
       respond_to do |format|
-        format.html { render :edit, status: :unprocessible_entity }
+        format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @timesheet.errors, status: :unprocessible_entity }
       end
     end
