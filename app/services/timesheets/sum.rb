@@ -4,7 +4,6 @@ module Timesheets
       worked_hours = (first_timesheet.worked_hours + second_timesheet.worked_hours)
         .group_by(&:day_of_month).map do |day_of_month, worked_hours|
         hours = worked_hours.map(&:hours).compact
-        fill = worked_hours.map(&:fill).compact
         note = hours.any? ? '' : worked_hours.map(&:note).compact.first
 
         WorkedHour.new(
