@@ -1,8 +1,12 @@
 wb = xlsx_package.workbook
 
 s = wb.styles
-header = s.add_style font_name: 'Arial', sz: 9, b: true, border: { style: :thin, color: '000000' }, alignment: { horizontal: :center, vertical: :center }
-rotate = s.add_style font_name: 'Arial', sz: 9, b: true, border: { style: :thin, color: '000000' }, alignment: {textRotation: 90, horizontal: :center, vertical: :center}
+
+header = s.add_style font_name: 'Arial', sz: 9, b: true, border: { style: :thin, color: '000000' },
+  alignment: { horizontal: :center, vertical: :center }
+
+rotate = s.add_style font_name: 'Arial', sz: 9, b: true, border: { style: :thin, color: '000000' },
+  alignment: {textRotation: 90, horizontal: :center, vertical: :center}
 
 wb.add_worksheet(name: "sheet1") do |sheet|
   
@@ -36,17 +40,33 @@ wb.add_worksheet(name: "sheet1") do |sheet|
     sheet.col_style 8+$days_count+5..8+$days_count+13, header
   
   Timesheet.order(:full_name).group_by(&:full_name).each do |full_name, timesheets|
-  timesheet = timesheets.sum
-    label = s.add_style font_name: 'Arial', sz: 10, border: { style: :thin, color: '000000' }, alignment:  { horizontal: :left, vertical: :center }
     
-    itogo = s.add_style font_name: 'Arial', sz: 10, border: { style: :thin, color: '000000' }, alignment:  { horizontal: :center, vertical: :center }, fg_color: "FF0000"
-    cods = s.add_style font_name: 'Arial', sz: 10, b: true, border: { style: :thin, color: '000000' }, alignment:  { horizontal: :left, vertical: :center }
-    chasov = s.add_style font_name: 'Arial', sz: 10, b: true, border: { style: :thin, color: '000000' }, alignment:  { horizontal: :left, vertical: :center },bg_color: 'FFFFC000'
-    name = s.add_style font_name: 'Arial', sz: 10, border: { style: :thin, color: '000000' }, alignment: { horizontal: :left }, bg_color: timesheet.colour
-    r = sheet.add_row [timesheet.unit, timesheet.subdivision_code, timesheet.personnel_number, if timesheet.employment_official_date.size > 1 then Date.parse(timesheet.employment_official_date).strftime("%d.%m.%y") end, if timesheet.employment_fact_date.size > 1 then Date.parse(timesheet.employment_fact_date).strftime("%d.%m.%y") end, timesheet.id, timesheet.full_name, timesheet.position ], style: [label,cods,cods,label,label,label,name,label]
+    timesheet = timesheets.sum
+    
+    label = s.add_style font_name: 'Arial', sz: 10, border: { style: :thin, color: '000000' },
+      alignment:  { horizontal: :left, vertical: :center }
+    
+    itogo = s.add_style font_name: 'Arial', sz: 10, border: { style: :thin, color: '000000' },
+      alignment:  { horizontal: :center, vertical: :center }, fg_color: "FF0000"
+    
+    cods = s.add_style font_name: 'Arial', sz: 10, b: true, border: { style: :thin, color: '000000' },
+      alignment:  { horizontal: :left, vertical: :center }
+    
+    chasov = s.add_style font_name: 'Arial', sz: 10, b: true, border: { style: :thin, color: '000000' },
+      alignment:  { horizontal: :left, vertical: :center },bg_color: 'FFFFC000'
+    
+    name = s.add_style font_name: 'Arial', sz: 10, border: { style: :thin, color: '000000' },
+      alignment: { horizontal: :left }, bg_color: timesheet.colour
+    
+    r = sheet.add_row [timesheet.unit, timesheet.subdivision_code, timesheet.personnel_number,
+      if timesheet.employment_official_date.size > 1 then Date.parse(timesheet.employment_official_date).strftime("%d.%m.%y") end,
+      if timesheet.employment_fact_date.size > 1 then Date.parse(timesheet.employment_fact_date).strftime("%d.%m.%y") end,
+      timesheet.id, timesheet.full_name, timesheet.position ], style: [label,cods,cods,label,label,label,name,label]
+
     $days_count.times.map {|i| timesheet.worked_hours.find{ _1.day_of_month == (i + 1)}}.each do |worked_hour|
       r.add_cell worked_hour&.display || ' '
     end
+
     r.add_cell timesheet.worked_shifts_total
     r.add_cell timesheet.worked_hours_total
     r.add_cell timesheet.worked_hours_per_day
@@ -62,8 +82,8 @@ wb.add_worksheet(name: "sheet1") do |sheet|
     r.add_cell timesheet.absences_by_permission_vacation
     
     $days_count.times.map {|i| timesheet.worked_hours.find{ _1.day_of_month == (i + 1)}}.each_with_index do |worked_hour, index|
-      
-      days = s.add_style font_name: 'Arial', sz: 8, border: { style: :thin, color: '000000' }, alignment:  { horizontal: :center, vertical: :center }, bg_color: worked_hour&.fill
+      days = s.add_style font_name: 'Arial', sz: 8, border: { style: :thin, color: '000000' },
+        alignment:  { horizontal: :center, vertical: :center }, bg_color: worked_hour&.fill
       sheet.rows.last.cells[8+index].style = days
     end
     

@@ -107,7 +107,22 @@ class TimesheetsController < ApplicationController
 
   def delete_duplicates
     @timesheets = Timesheet.all
-    @timesheets = @timesheets - @timesheets.uniq{ |timesheet| [timesheet.subdivision_code, timesheet.personnel_number, timesheet.full_name, timesheet.worked_shifts_total, timesheet.worked_hours.count, timesheet.worked_hours_total, timesheet.worked_hours_per_day, timesheet.worked_hours_per_night, timesheet.absences_total, timesheet.absences_by_request, timesheet.absences_by_certificate, timesheet.absences_by_sick_leave, timesheet.vacation_days_total, timesheet.absences_by_permission, timesheet.absences_with_working_out, timesheet.absences_by_permission_vacation] }
+    @timesheets = @timesheets - @timesheets.uniq{ |timesheet| [timesheet.subdivision_code,
+                                                                timesheet.personnel_number,
+                                                                timesheet.full_name,
+                                                                timesheet.worked_shifts_total,
+                                                                timesheet.worked_hours.count,
+                                                                timesheet.worked_hours_total,
+                                                                timesheet.worked_hours_per_day,
+                                                                timesheet.worked_hours_per_night,
+                                                                timesheet.absences_total,
+                                                                timesheet.absences_by_request,
+                                                                timesheet.absences_by_certificate,
+                                                                timesheet.absences_by_sick_leave,
+                                                                timesheet.vacation_days_total,
+                                                                timesheet.absences_by_permission,
+                                                                timesheet.absences_with_working_out,
+                                                                timesheet.absences_by_permission_vacation] }
     tc = @timesheets.count
     @timesheets.map(&:destroy)
     redirect_to timesheets_path, notice: "#{tc} дублей удалены"
@@ -134,6 +149,10 @@ class TimesheetsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def timesheet_params
-    params.require(:timesheet).permit(:unit, :subdivision_code, :personnel_number, :employment_official_date, :employment_fact_date, :full_name, :position, :worked_shifts_total, :worked_hours_total, :worked_hours_per_day, :worked_hours_per_night, :check_formula, :absences_total, :absences_by_request, :absences_by_certificate, :absences_by_sick_leave, :vacation_days_total, :absences_by_permission, :absences_with_working_out, :absences_by_permission_vacation, :colour,  worked_hours_attributes: [:id, :hours, :note, :fill])
+    params.require(:timesheet).permit(:unit, :subdivision_code, :personnel_number, :employment_official_date, :employment_fact_date,
+                                        :full_name, :position, :worked_shifts_total, :worked_hours_total, :worked_hours_per_day,
+                                        :worked_hours_per_night, :check_formula, :absences_total, :absences_by_request, :absences_by_certificate,
+                                        :absences_by_sick_leave, :vacation_days_total, :absences_by_permission, :absences_with_working_out,
+                                        :absences_by_permission_vacation, :colour,  worked_hours_attributes: [:id, :hours, :note, :fill])
   end
 end

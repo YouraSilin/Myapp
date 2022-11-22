@@ -4,12 +4,13 @@ module Timesheets
       worked_hours = (first_timesheet.worked_hours + second_timesheet.worked_hours)
         .group_by(&:day_of_month).map do |day_of_month, worked_hours|
         hours = worked_hours.map(&:hours).compact
+        fills = worked_hours.map(&:fill)
         note = hours.any? ? '' : worked_hours.map(&:note).compact.first
 
         WorkedHour.new(
           day_of_month: day_of_month,
           hours: (hours.sum if hours.any?),
-          fill: ('FF0000' if hours.sum > 11 ),
+          fill: ('FF0000' if hours.sum > 11 || ((fills.first != fills.second) && hours.first != nil && hours.second != nil) ),
           note: note
         )
       end
