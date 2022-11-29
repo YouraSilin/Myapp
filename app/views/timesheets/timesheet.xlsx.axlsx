@@ -39,7 +39,7 @@ wb.add_worksheet(name: "sheet1") do |sheet|
     sheet.col_style 8+$days_count..8+$days_count+5, rotate
     sheet.col_style 8+$days_count+5..8+$days_count+13, header
   
-  Timesheet.order(:full_name).group_by(&:full_name).each do |full_name, timesheets|
+  Timesheet.order(:full_name).group_by(&:personnel_number).each do |personnel_number, timesheets|
     
     timesheet = timesheets.sum
     

@@ -1,7 +1,7 @@
 class TimesheetsController < ApplicationController
   before_action :set_timesheet, only: %i[ show edit update destroy ]
 
-  $days_count = 31
+  $days_count = 30
 
   require 'pry-remote'
   
