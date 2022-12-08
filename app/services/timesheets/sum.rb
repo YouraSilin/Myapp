@@ -10,7 +10,11 @@ module Timesheets
         WorkedHour.new(
           day_of_month: day_of_month,
           hours: (hours.sum if hours.any?),
-          fill: ( if hours.sum > 11 then 'FF0000' elsif fills.first.presence != fills.second && hours.first != nil && hours.second != nil then 'FF0000' else fills.first.presence || fills.second end ),
+          fill: ( if hours.sum > 11 then
+                    'FF0000'
+                  elsif fills.first.presence != fills.second && hours.first != nil && hours.second != nil then
+                    'FF0000'
+                  else fills.first.presence || fills.second end ),
           note: note
         )
       end

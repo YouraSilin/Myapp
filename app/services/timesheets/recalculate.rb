@@ -18,6 +18,8 @@ module Timesheets
       add_otpusk_po_razresheniu(timesheet)
       add_worked_hours_per_day(timesheet)
       add_worked_hours_per_night(timesheet)
+      add_worked_shifts_per_day(timesheet)
+      add_worked_shifts_per_night(timesheet)
       add_itogo(timesheet)
       timesheet.save! if save
     end
@@ -189,6 +191,30 @@ module Timesheets
         end
       end
       timesheet.worked_hours_per_night = chasov
+    end
+
+    def add_worked_shifts_per_day(timesheet)
+      shifts = 0
+      timesheet.worked_hours.each do |worked_hours|
+        if worked_hours.fill == 'ffffff'
+          if worked_hours.hours.to_f > 0 then
+            shifts = shifts + 1
+          end
+        end
+      end
+      timesheet.worked_shifts_per_day = shifts
+    end
+
+    def add_worked_shifts_per_night(timesheet)
+      shifts = 0
+      timesheet.worked_hours.each do |worked_hours|
+        if worked_hours.fill != 'ffffff'
+          if worked_hours.hours.to_f > 0 then
+            shifts = shifts + 1
+          end
+        end
+      end
+      timesheet.worked_shifts_per_night = shifts
     end
 
     def add_itogo(timesheet)

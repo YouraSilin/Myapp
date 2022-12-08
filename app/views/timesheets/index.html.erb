@@ -50,14 +50,16 @@
       <th style="width: 40px;" rowspan=2 scope="col" > </th>
       <th style="width: 40px;" rowspan=2 scope="col" >код</th>
       <th style="width: 40px;" rowspan=2 scope="col" >таб№</th>
-      <th style="width: 60px;" rowspan=2 scope="col" >офиц.</th>
-      <th style="width: 60px;" rowspan=2 scope="col" >факт</th>
-      <th style="width: 60px;" rowspan=2 scope="col" >№</th>
-      <th style="width: 130px;" rowspan=2 scope="col" >Ф.И.О.</th>
-      <th style="width: 160px;" rowspan=2 scope="col" >должность</th>
+      <th style="width: 55px;" rowspan=2 scope="col" >офиц.</th>
+      <th style="width: 55px;" rowspan=2 scope="col" >факт</th>
+      <th style="width: 25px;" rowspan=2 scope="col" >№</th>
+      <th style="width: 120px;" rowspan=2 scope="col" >Ф.И.О.</th>
+      <th style="width: 130px;" rowspan=2 scope="col" >должность</th>
       <th style="width: 860px;" colspan=<%= $days_count %> scope="col" ></th>
       <th style="width: 40px;" rowspan=2 scope="col" >явок</th>
       <th style="width: 40px;" rowspan=2 scope="col" >часов</th>
+      <th style="width: 40px;" rowspan=2 scope="col" >яв/д</th>
+      <th style="width: 40px;" rowspan=2 scope="col" >яв/н</th>
       <th style="width: 40px;" rowspan=2 scope="col" >день</th>
       <th style="width: 40px;" rowspan=2 scope="col" >ночь</th>
       <th style="width: 40px;" rowspan=2 scope="col" >итого</th>
@@ -112,6 +114,8 @@
           <%= if timesheet.worked_hours_total.to_i == timesheet.worked_hours_total then
             timesheet.worked_hours_total.to_i else timesheet.worked_hours_total end %>
         </td>
+        <td><%= timesheet.worked_shifts_per_day %></td>
+        <td><%= timesheet.worked_shifts_per_night %></td>
         <td class="text-nowrap overflow-hidden">
           <%= if timesheet.worked_hours_per_day.to_i == timesheet.worked_hours_per_day then
             timesheet.worked_hours_per_day.to_i else timesheet.worked_hours_per_day end %>

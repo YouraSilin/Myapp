@@ -40,6 +40,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_20_094847) do
     t.string "position"
     t.float "worked_shifts_total"
     t.float "worked_hours_total"
+    t.integer "worked_shifts_per_day"
+    t.integer "worked_shifts_per_night"
     t.float "worked_hours_per_day"
     t.float "worked_hours_per_night"
     t.string "check_formula"

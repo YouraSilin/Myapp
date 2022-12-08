@@ -11,13 +11,15 @@ rotate = s.add_style font_name: 'Arial', sz: 9, b: true, border: { style: :thin,
 wb.add_worksheet(name: "sheet1") do |sheet|
   
   r = sheet.add_row [' ','код','таб№','офиц.','факт','№','Ф.И.О.','должность'], style: header, height: 40
-    col_widths= [5,4,6,7,7,5,17,13]
+    col_widths= [5,4,6,7,7,3,17,13]
     $days_count.times do |day_num|
       r.add_cell day_num+1
       col_widths[8+day_num]= 3.7
     end
     r.add_cell 'явок'
     r.add_cell 'часов'
+    r.add_cell 'яв/д'
+    r.add_cell 'яв/н'
     r.add_cell 'день'
     r.add_cell 'ночь'
     r.add_cell 'итого'
@@ -29,15 +31,24 @@ wb.add_worksheet(name: "sheet1") do |sheet|
     r.add_cell 'а'
     r.add_cell 'и'
     r.add_cell 'оа'
-    (8+$days_count..8+$days_count+5).each do |i|
+    (8+$days_count..8+$days_count+1).each do |i|
+      col_widths[i]= 3.3
+    end
+    (8+$days_count+1..8+$days_count+2).each do |i|
       col_widths[i]= 5
     end
-    (8+$days_count+5..8+$days_count+13).each do |i|
+    (8+$days_count+2..8+$days_count+3).each do |i|
+      col_widths[i]= 3.3
+    end
+    (8+$days_count+4..8+$days_count+5).each do |i|
+      col_widths[i]= 5
+    end
+    (8+$days_count+6..8+$days_count+15).each do |i|
       col_widths[i]= 3.3
     end
     sheet.col_style 8..8+$days_count-1, header
-    sheet.col_style 8+$days_count..8+$days_count+5, rotate
-    sheet.col_style 8+$days_count+5..8+$days_count+13, header
+    sheet.col_style 8+$days_count..8+$days_count+7, rotate
+    sheet.col_style 8+$days_count+7..8+$days_count+15, header
   
   Timesheet.order(:full_name).group_by(&:personnel_number).each do |personnel_number, timesheets|
     
@@ -61,7 +72,7 @@ wb.add_worksheet(name: "sheet1") do |sheet|
     r = sheet.add_row [timesheet.unit, timesheet.subdivision_code, timesheet.personnel_number,
       if timesheet.employment_official_date.size > 1 then Date.parse(timesheet.employment_official_date).strftime("%d.%m.%y") end,
       if timesheet.employment_fact_date.size > 1 then Date.parse(timesheet.employment_fact_date).strftime("%d.%m.%y") end,
-      timesheet.id, timesheet.full_name, timesheet.position ], style: [label,cods,cods,label,label,label,name,label]
+      timesheet.id, timesheet.full_name, timesheet.position ], :types => [nil, nil, :string], style: [label,cods,cods,label,label,label,name,label]
 
     $days_count.times.map {|i| timesheet.worked_hours.find{ _1.day_of_month == (i + 1)}}.each do |worked_hour|
       r.add_cell worked_hour&.display || ' '
@@ -69,6 +80,8 @@ wb.add_worksheet(name: "sheet1") do |sheet|
 
     r.add_cell timesheet.worked_shifts_total
     r.add_cell timesheet.worked_hours_total
+    r.add_cell timesheet.worked_shifts_per_day
+    r.add_cell timesheet.worked_shifts_per_night
     r.add_cell timesheet.worked_hours_per_day
     r.add_cell timesheet.worked_hours_per_night
     r.add_cell timesheet.check_formula
@@ -88,9 +101,9 @@ wb.add_worksheet(name: "sheet1") do |sheet|
     end
     
     sheet.col_style 8+$days_count..8+$days_count+1, chasov, row_offset: 1
-    sheet.col_style 8+$days_count+2..8+$days_count+3, label, row_offset: 1
-    sheet.col_style 8+$days_count+4, itogo, row_offset: 1
-    sheet.col_style 8+$days_count+5..8+$days_count+13, label, row_offset: 1
+    sheet.col_style 8+$days_count+2..8+$days_count+5, label, row_offset: 1
+    sheet.col_style 8+$days_count+6, itogo, row_offset: 1
+    sheet.col_style 8+$days_count+7..8+$days_count+15, label, row_offset: 1
 
     sheet.column_widths *col_widths
   end
