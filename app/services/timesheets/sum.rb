@@ -5,7 +5,7 @@ module Timesheets
         .group_by(&:day_of_month).map do |day_of_month, worked_hours|
         hours = worked_hours.map(&:hours).compact
         fills = worked_hours.map(&:fill)
-        note = hours.any? ? '' : worked_hours.map(&:note).compact.first
+        notes = worked_hours.map(&:note).compact
 
         WorkedHour.new(
           day_of_month: day_of_month,
@@ -15,7 +15,7 @@ module Timesheets
                   elsif fills.first.presence != fills.second && hours.first != nil && hours.second != nil then
                     'FF0000'
                   else fills.first.presence || fills.second end ),
-          note: note
+          note: (if hours.first == nil && hours.second == nil then notes.first.presence || notes.second end)
         )
       end
 
@@ -23,8 +23,15 @@ module Timesheets
         unit: first_timesheet.unit,
         subdivision_code: first_timesheet.subdivision_code,
         personnel_number: first_timesheet.personnel_number,
-        employment_official_date: first_timesheet.employment_official_date.presence || second_timesheet.employment_official_date,
-        employment_fact_date: first_timesheet.employment_fact_date.presence || second_timesheet.employment_fact_date,
+        colour: if first_timesheet.colour == 'ffffff' || second_timesheet.colour == 'ffffff' then 'ffffff' end,
+        employment_official_date: if first_timesheet.colour == 'ffffff' then
+                                    first_timesheet.employment_official_date.presence
+                                  end
+                                  || second_timesheet.employment_official_date,
+        employment_fact_date: if first_timesheet.colour == 'ffffff' then
+                                first_timesheet.employment_fact_date.presence
+                              end
+                              || second_timesheet.employment_fact_date,
         full_name: first_timesheet.full_name,
         position: first_timesheet.position,
         worked_hours: worked_hours
