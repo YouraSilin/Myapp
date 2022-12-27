@@ -20,18 +20,12 @@ module Timesheets
       end
 
       Timesheet.new(
-        unit: first_timesheet.unit,
-        subdivision_code: first_timesheet.subdivision_code,
-        personnel_number: first_timesheet.personnel_number,
         colour: if first_timesheet.colour == 'ffffff' || second_timesheet.colour == 'ffffff' then 'ffffff' end,
-        employment_official_date: if first_timesheet.colour == 'ffffff' then
-                                    first_timesheet.employment_official_date.presence
-                                  end
-                                  || second_timesheet.employment_official_date,
-        employment_fact_date: if first_timesheet.colour == 'ffffff' then
-                                first_timesheet.employment_fact_date.presence
-                              end
-                              || second_timesheet.employment_fact_date,
+        unit: if first_timesheet.colour == 'ffffff' then first_timesheet.unit.presence || '' end || second_timesheet.unit,
+        subdivision_code: if first_timesheet.colour == 'ffffff' then first_timesheet.subdivision_code.presence end || second_timesheet.subdivision_code,
+        personnel_number: first_timesheet.personnel_number,
+        employment_official_date: if first_timesheet.colour == 'ffffff' then first_timesheet.employment_official_date.presence end || second_timesheet.employment_official_date,
+        employment_fact_date: if first_timesheet.colour == 'ffffff' then first_timesheet.employment_fact_date.presence end || second_timesheet.employment_fact_date,
         full_name: first_timesheet.full_name,
         position: first_timesheet.position,
         worked_hours: worked_hours
