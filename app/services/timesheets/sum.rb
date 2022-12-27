@@ -20,6 +20,7 @@ module Timesheets
       end
 
       Timesheet.new(
+        
         colour: if first_timesheet.colour == 'ffffff' || second_timesheet.colour == 'ffffff' then 'ffffff' end,
         unit: if first_timesheet.colour == 'ffffff' then first_timesheet.unit.presence || '' end || second_timesheet.unit,
         subdivision_code: if first_timesheet.colour == 'ffffff' then first_timesheet.subdivision_code.presence end || second_timesheet.subdivision_code,
