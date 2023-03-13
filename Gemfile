@@ -76,6 +76,7 @@ group :test do
 end
 
 gem "sass-rails"
+gem "jquery-rails"
 
 gem "caxlsx", ">= 3.2"
 gem "caxlsx_rails", ">= 0.6"
