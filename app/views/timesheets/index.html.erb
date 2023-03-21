@@ -2,7 +2,7 @@
 <div class="mt-3 row">
   <%= form_with url: import_timesheets_path do |f|%>
     <div class="col col-md-auto d-flex">
-      <%= f.submit 'Импорт файла', class: 'btn btn-primary' %>
+      <%= f.submit 'Импорт файла', class: 'btn btn-primary scroll' %>
       <%= f.file_field :file, class: 'form-control ms-1' %>
     </div>
   <% end %>
@@ -10,31 +10,31 @@
 
 <div>
   <%= link_to 'Экспорт в XLSX', new_timesheet_path(format: :xlsx),
-    class: "btn btn-primary text-white text-decoration-none mt-3", style: "width: 8rem" %>
+    class: "btn btn-primary text-white text-decoration-none mt-3 scroll", style: "width: 8rem" %>
 
   <%= link_to 'Добавить строку', new_timesheet_path,
-    class: "btn btn-primary text-white text-decoration-none mt-3", style: "width: 8rem" %>
+    class: "btn btn-primary text-white text-decoration-none mt-3 scroll", style: "width: 8rem" %>
 
   <%= link_to "Удалить пустышки", timesheet_delete_empty_path(@timesheets),
-    class: "btn btn-success text-white text-decoration-none mt-3", style: "width: 8rem" , method: :delete %>
+    class: "btn btn-success text-white text-decoration-none mt-3 scroll", style: "width: 8rem" , method: :delete %>
 
   <%= link_to "Удалить дубликаты", timesheet_delete_duplicates_path(@timesheets),
-    class: "btn btn-success text-white text-decoration-none mt-3", style: "width: 8rem" , method: :delete %>
+    class: "btn btn-success text-white text-decoration-none mt-3 scroll", style: "width: 8rem" , method: :delete %>
 
   <%= link_to "Удалить бирюзовые", timesheet_delete_turquoise_path(@timesheets),
-    class: "btn btn-success text-white text-decoration-none mt-3", style: "width: 8rem" , method: :delete %>
+    class: "btn btn-success text-white text-decoration-none mt-3 scroll", style: "width: 8rem" , method: :delete %>
 
   <%= link_to "Удалить не бирюзовые", timesheet_delete_not_turquoise_path(@timesheets),
-    class: "btn btn-success text-white text-decoration-none mt-3", style: "width: 8rem" , method: :delete %>
+    class: "btn btn-success text-white text-decoration-none mt-3 scroll", style: "width: 8rem" , method: :delete %>
 
   <%= link_to "Удалить все строки", timesheet_delete_all_path(@timesheets),
-    class: "btn btn-danger text-white text-decoration-none mt-3", style: "width: 8rem" , method: :delete %>
+    class: "btn btn-danger text-white text-decoration-none mt-3 scroll", style: "width: 8rem" , method: :delete %>
 </div>
 
 <form class="d-flex mt-3" role="search">
-  <%= form_with(url: timesheets_path, method: :get, data: { turbo_frame: "timesheets"}) do |form| %>
+  <%= form_with(url: timesheets_path, method: :get) do |form| %>
     <%= form.text_field :query, class: "form-control me-2", type: "search", placeholder: "Поиск по табелям" %>
-    <%= form.submit "Найти", class: "btn btn-outline-success ", style: "width: 8rem", type: "submit" %>
+    <%= form.submit "Найти", class: "btn btn-outline-success scroll", style: "width: 8rem", type: "submit" %>
   <% end %>
 </form>
 
