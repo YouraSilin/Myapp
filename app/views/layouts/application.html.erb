@@ -5,10 +5,11 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
-    <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
+    
     <style>
       #loader {
         position: fixed;
@@ -17,7 +18,7 @@
         width: 100%;
         height: 100%;
         z-index: 99999;
-        background: url(<%= asset_path 'loading-gif.gif' %>) 50% 50% no-repeat rgb(15 10 10 /59%);
+        background: url(<%= asset_path 'loading.svg' %>) 50% 50% no-repeat rgb(15 10 10 /89%);
       }
     </style>
 
@@ -54,20 +55,20 @@
       <% end %>
       <%= yield %>
       <div id="loader" style="display: none;"></div>
-      <script>
-        $('.scroll').click( function( event ) {
+      <script type="text/javascript">
+        $('.spinner').click( function( event ) {
           event.preventDefault;
-          $("#loader").show()
+          $("#loader").css("display", "block")
           $.ajax({
             url: $(this).prop('href'), // this will grab 'action_path' or whatever your link_to points to
             global: false // prevent ajaxStart from being triggered
           });
         });
       </script>
-      <script src="https://unpkg.com/vanilla-back-to-top@7.2.1/dist/vanilla-back-to-top.min.js"></script>
+      <script type="text/javascript" src="https://unpkg.com/vanilla-back-to-top@7.2.1/dist/vanilla-back-to-top.min.js"></script>
       <script>addBackToTop({
         diameter: 56,
-        backgroundColor: 'rgb(255, 82, 82)',
+        backgroundColor: 'rgb(102, 178, 255)',
         textColor: '#fff'
       })
       </script>
