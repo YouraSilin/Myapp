@@ -18,8 +18,32 @@
         width: 100%;
         height: 100%;
         z-index: 99999;
-        background: url(<%= asset_path 'loading.svg' %>) 50% 50% no-repeat rgb(15 10 10 /89%);
+        background: url(<%= asset_path 'spin.gif' %>) 50% 50% no-repeat;
       }
+      .alert {
+        display: none;
+        opacity: 0;
+        position: fixed;
+        right: 0px;
+        bottom: 0px;
+        z-index: 99999;
+      }
+      @keyframes fadeInFromNone {
+        0% {
+          opacity: 0;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+      @keyframes fadeOutFromBlock {
+        0% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0;
+        }
+      }      
     </style>
 
   </head>
@@ -71,6 +95,16 @@
         backgroundColor: 'rgb(102, 178, 255)',
         textColor: '#fff'
       })
+      </script>
+      <script type="text/javascript">
+        $(document).ready(function(){
+          $(".alert").css("display","block");
+          $(".alert").css("opacity","1");
+          $(".alert").css("animation","fadeInFromNone 1.2s");
+          setTimeout(function(){
+          $('.alert').fadeOut(1200);
+          }, 2000);
+        });
       </script>
     </div>
 
